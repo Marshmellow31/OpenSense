@@ -1,0 +1,41 @@
+name: Compatibility observation
+description: Share a sanitized observation without implying verified vehicle support.
+body:
+  - type: markdown
+    attributes:
+      value: 'Discovery and SDP are observations only. OpenSense currently has no vehicle data connection. Share owner-authorized stationary observations; omit VINs, plates, names, MAC addresses, raw captures, original APKs, and decompiled material.'
+  - type: dropdown
+    id: family
+    attributes:
+      label: Original app family
+      options:
+        - Legacy BlueSense (com.visteon)
+        - New BlueSense (com.contus.mahindra.xuv500)
+        - Unknown
+    validations:
+      required: true
+  - type: input
+    id: configuration
+    attributes:
+      label: Vehicle and head-unit description
+      description: Variant, approximate model year, factory/replacement head unit; no identifying details.
+    validations:
+      required: true
+  - type: dropdown
+    id: confidence
+    attributes:
+      label: Claim label
+      options:
+        - needs-confirmation
+        - historical
+        - verified
+        - recommendation-not-fact
+    validations:
+      required: true
+  - type: textarea
+    id: observation
+    attributes:
+      label: Observation and verification scope
+      description: Build identity, phone/Android version, exact steps, actual result, and what was not tested. Explain the evidence for the selected claim label.
+    validations:
+      required: true

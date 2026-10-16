@@ -1,0 +1,36 @@
+name: Bug report
+description: Report an OpenSense app problem with reproducible, sanitized steps.
+body:
+  - type: markdown
+    attributes:
+      value: 'For security issues, follow SECURITY.md. Do not attach original APKs, decompiled source, raw logs, device identifiers, VINs, or packet captures.'
+  - type: input
+    id: build
+    attributes:
+      label: Build identity
+      description: Commit or development build version; say uncommitted if appropriate.
+    validations:
+      required: true
+  - type: input
+    id: device
+    attributes:
+      label: Phone and Android version
+    validations:
+      required: true
+  - type: dropdown
+    id: evidence
+    attributes:
+      label: Where did this happen?
+      options:
+        - Physical phone
+        - Emulator
+        - Source review or automated test
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps and actual behavior
+      description: Include selected profile, permission state, and expected behavior. Sanitize screenshots.
+    validations:
+      required: true

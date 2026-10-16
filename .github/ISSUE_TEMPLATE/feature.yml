@@ -1,0 +1,17 @@
+name: Feature request
+description: Describe an improvement and the evidence it needs.
+body:
+  - type: textarea
+    id: need
+    attributes:
+      label: User need
+      description: Describe the situation and desired behavior.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed improvement and evidence
+      description: Separate recommendations from verified facts. Do not include guessed vehicle commands or private research materials.
+    validations:
+      required: true
