@@ -1,6 +1,6 @@
 # OpenSense progress
 
-Updated: 2026-10-16. State: **local development foundation and static APK research**.
+Updated: 2026-10-16. State: **public research preview and static APK investigation**.
 Physical vehicle compatibility is not established.
 Implementation work was stopped at the user's request. The user subsequently
 authorized creating the public `Marshmellow31/OpenSense` repository and committing
@@ -67,7 +67,12 @@ alongside theme choice and establishes no compatibility.
   independently authored OpenSense development APK after successful checks.
   Initial remote run reached SDK setup, then failed because the setup action
   requested the obsolete `tools` package. Its package selection was corrected to
-  `platform-tools`; the next run will establish remote build results.
+  `platform-tools`. The subsequent [GitHub run 38847498840](https://github.com/Marshmellow31/OpenSense/actions/runs/38847498840)
+  **passed** on commit `6c2527407199afa5ecdded9157a23d48f866112f`:
+  Linux build, app/Bluetooth lint, JVM tests and Python tests all succeeded.
+  `OpenSense-debug` artifact ID `12023593844` was uploaded successfully; it contains
+  the CI-built debug APK and is retained until 2026-10-30. Emulator UI results above
+  remain local evidence; the remote pipeline does not run that suite.
 
 ## Unverified assumptions and blockers
 
@@ -106,6 +111,9 @@ README now explains the research method, artifact-analysis limits, protocol
 differences, APK operation/data flows, build/download instructions, local test
 results and a progress/next-milestone checklist. Local build/lint and Python checks
 were rerun before publication; all passed. JVM reports contain 28 passing tests.
+Remote CI and the development-APK upload are now verified as described above.
+The final publication-status update changes documentation only; it does not change
+the application or CI configuration tested by commit `6c25274`.
 
 ## Resume handoff
 

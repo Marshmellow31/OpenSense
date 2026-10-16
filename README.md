@@ -27,6 +27,7 @@ full handoff, remaining issues and validation boundaries.
 | Simulated vehicle and app screens | Implemented | Dashboard, media/climate displays, feature states, diagnostics and settings |
 | Bluetooth discovery / service inspection | Implemented; physical radio validation pending | Permission-aware Classic discovery and standard SDP |
 | Local validation | Passing at current baseline | 28 JVM tests, 3 Python tests, 3 emulator UI tests; build and lint pass |
+| Public CI / development APK | Verified | [Successful Linux CI run](https://github.com/Marshmellow31/OpenSense/actions/runs/38847498840) builds/tests/lints and provides `OpenSense-debug` |
 | Real head-unit compatibility | Pending | Exact head-unit/firmware identification and consented parked captures |
 | Vehicle controls | Disabled | Requires verified effects, hardware evidence and explicit owner approval |
 | UI polish | In progress | Small-screen / large-font navigation clipping; landscape checks remain |
@@ -156,6 +157,12 @@ sign-in to download them.
 This is a debug research build, not a production release or a verified vehicle
 replacement. There is no published Play Store release. The original archival
 APKs are not distributed in this repository or in CI artifacts.
+
+The [first successful published build](https://github.com/Marshmellow31/OpenSense/actions/runs/38847498840)
+is from commit `6c25274`, verified on 16 October 2026. Its `OpenSense-debug`
+artifact is available until 30 October 2026; use a newer successful run after
+that date or build locally. The final publication-status documentation update
+does not change that tested application code.
 
 ## Build
 
