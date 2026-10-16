@@ -1,7 +1,7 @@
 # Compatibility and feature matrix
 
 No physical vehicle is verified compatible yet. Profile selection records the
-owner's choice; it does not detect hardware or unlock controls. The primary
+owner's choice; it does not detect hardware. Explicit experimental sessions now expose supported commands; see docs/live-integration.md. The primary
 test target is the user's 2018 XUV500 W7, with head-unit firmware still unknown.
 
 Evidence labels: **S** = inspected APK static path; **H** = historical developer
@@ -11,19 +11,19 @@ for the incompatible message formats. No feature is vehicle-verified.
 
 | Feature | Original APK/documentation evidence | Required hardware / data source | Applicable variant evidence | Protocol status | OpenSense implementation |
 | --- | --- | --- | --- | --- | --- |
-| Bluetooth discovery/status | S: both transport paths use Classic SPP | Compatible factory/replacement head unit and Android adapter | H: legacy W8; newer New Age/facelift leads; W7 U | Separate framing profiles recovered statically; car session U | Classic discovery/SDP; simulation lifecycle; vehicle socket blocked |
-| Music/media | S: legacy RadioActivity/audio functions; newer AudioControl and media IDs 19/20/21/23 | Head-unit source/playback service; supported media source | Exact per-trim availability U | Raw framing decoded offline; control behavior U | Simulated playback display; vehicle writes disabled |
-| Climate display | S: legacy climate data holder, newer ClimateControl/192-bit path | Compatible HVAC-to-head-unit integration | W7 and each head-unit firmware U | Static consumer paths; scaling/units U | Simulated temperatures; vehicle unavailable |
-| Climate controls | H: newer developer listing; S: newer controls/code paths | Suitable HVAC/control interface | Legacy write support not established; newer per-trim U | No approved/validated control sequence | Disabled |
-| Fuel/economy/range | S: legacy vehicle holder; newer message 10/economy/DTE path | Vehicle data made available by infotainment | Per-variant and firmware U | Static assignments found; capture/units U | Simulated fuel/range; no decoded vehicle values |
-| Tyre pressure/temperature | S: legacy TPMS parser; newer Tiretronics consumer | TPMS sensors, receiver and exposed signals | Do not assume W7 has factory TPMS; U | Payload candidates; masks/scaling U | Unavailable, even in demo |
-| Door/body status | S: legacy alert/door module; newer vehicle/status consumers | Body signals exposed by infotainment | All exact trims U | Static paths found; validity/bit mapping U | Simulated closed-door state; vehicle unavailable |
-| Trips/EcoSense | S: newer GreenDrive modules/local DB/wearable paths; H: developer listing | Compatible transmission/firmware and exposed trip signals | Historical older manual W6/W8/W10 restriction; W7 U | Several length-based records; full semantics U | Unavailable |
-| Last parked location | H: developer location feature; S: newer location modules/preferences | Phone location and/or head-unit GPS; source selection unresolved | No per-trim verified matrix | Parking trigger/source needs more tracing | Unavailable; no location permission on modern app |
-| Warnings, lamps/wipers, speed | S: legacy warnings/lamp/speed modules; newer related dispatch | Applicable sensors/body data/head-unit integration | Exact hardware U | Some raw consumers mapped; masks/units U | Unavailable |
-| Reminders/personal records | S: local legacy SQLite/reminder activities; newer reminder modules | Primarily phone-local storage, not proof of a vehicle service | App-generation feature | Local feature rather than vehicle protocol | Not implemented |
-| Emergency assist | S: newer emergency/SMS/location/call paths | Exact infotainment event and phone/network permissions | Variant/region/firmware U | Not validated; no emergency testing performed | Not implemented; no SMS/call permissions |
-| Wearable companion/social/cloud | S: newer wearable and third-party namespaces | Companion device/services/accounts where applicable | App feature, not car capability | App-to-watch/network boundaries need further mapping | Not implemented; no Internet permission |
+| Bluetooth discovery/status | S: both transport paths use Classic SPP | Compatible factory/replacement head unit and Android adapter | H: legacy W8; newer New Age/facelift leads; W7 U | Separate framing profiles recovered statically; car session U | Explicit family-specific RFCOMM plus discovery/SDP; hardware untested |
+| Music/media | S: legacy RadioActivity/audio functions; newer AudioControl and media IDs 19/20/21/23 | Head-unit source/playback service; supported media source | Exact per-trim availability U | Raw framing decoded offline; control behavior U | Live source/playback/volume commands and status; radio details partial |
+| Climate display | S: legacy climate data holder, newer ClimateControl/192-bit path | Compatible HVAC-to-head-unit integration | W7 and each head-unit firmware U | Static consumer paths; scaling/units U | Live nullable climate status; unit confirmation pending |
+| Climate controls | H: newer developer listing; S: newer controls/code paths | Suitable HVAC/control interface | Legacy write support not established; newer per-trim U | APK-derived encoders; physical effects unverified | Newer switches/fan/vent; Celsius temperature after unit report; legacy status only |
+| Fuel/economy/range | S: legacy vehicle holder; newer message 10/economy/DTE path | Vehicle data made available by infotainment | Per-variant and firmware U | Static assignments found; capture/units U | Live DTE/economy; no guessed fuel percentage |
+| Tyre pressure/temperature | S: legacy TPMS parser; newer Tiretronics consumer | TPMS sensors, receiver and exposed signals | Do not assume W7 has factory TPMS; U | Payload candidates; masks/scaling U | Legacy five-wheel codes/newer four-wheel decimals; units/fitment unverified |
+| Door/body status | S: legacy alert/door module; newer vehicle/status consumers | Body signals exposed by infotainment | All exact trims U | Static paths found; validity/bit mapping U | Live status codes; unknown stays blank |
+| Trips/EcoSense | S: newer GreenDrive modules/local DB/wearable paths; H: developer listing | Compatible transmission/firmware and exposed trip signals | Historical older manual W6/W8/W10 restriction; W7 U | Current EcoSense fields recovered; archives U | Phone GPS diary and current head-unit EcoSense; distinct sources |
+| Last parked location | H: developer location feature; S: newer location modules/preferences | Phone location and/or head-unit GPS; source selection unresolved | No per-trim verified matrix | Parking trigger/source needs more tracing | Explicit phone-location save, note, distance and maps handoff |
+| Warnings, lamps/wipers, speed | S: legacy warnings/lamp/speed modules; newer related dispatch | Applicable sensors/body data/head-unit integration | Exact hardware U | Some raw consumers mapped; masks/units U | Live mapped codes/speed; no safety-system claim |
+| Reminders/personal records | S: local legacy SQLite/reminder activities; newer reminder modules | Primarily phone-local storage, not proof of a vehicle service | App-generation feature | Local feature rather than vehicle protocol | Private records, fuel diary, reminders and document/manual links |
+| Emergency assist | S: newer emergency/SMS/location/call paths | Exact infotainment event and phone/network permissions | Variant/region/firmware U | Not validated; no emergency testing performed | Manual contact/dial/share handoff; no automatic SMS/calls |
+| Wearable companion/social/cloud | S: newer wearable and third-party namespaces | Companion device/services/accounts where applicable | App feature, not car capability | App-to-watch/network boundaries need further mapping | Excluded by user: private phone/Android sharing; no cloud or Wear OS |
 
 ## Vehicle profiles in the app
 

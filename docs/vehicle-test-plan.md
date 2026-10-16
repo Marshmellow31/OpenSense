@@ -1,7 +1,8 @@
 # What is needed from the XUV500
 
-The project currently has two downloaded APKs and static protocol findings.
-The next blocker is evidence from the exact infotainment system, not another UI.
+The project has two downloaded APKs, static findings and an experimental live build.
+The next proof gate is evidence from the exact infotainment system. See the
+[supported commands and first parked test](live-integration.md).
 
 ## First: identify the vehicle and head unit
 

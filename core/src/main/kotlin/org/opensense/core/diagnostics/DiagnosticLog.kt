@@ -3,7 +3,7 @@ package org.opensense.core.diagnostics
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-enum class DiagnosticCode { DEMO_STARTED, DEMO_STOPPED, SAMPLE_ACCEPTED, FRAME_REJECTED, RECONNECTING, STREAM_FAILED, PERMISSION_DENIED, DISCOVERY_STARTED, DISCOVERY_STOPPED, SERVICES_OBSERVED, ADAPTER_UNAVAILABLE }
+enum class DiagnosticCode { DEMO_STARTED, DEMO_STOPPED, SAMPLE_ACCEPTED, FRAME_REJECTED, RECONNECTING, STREAM_FAILED, PERMISSION_DENIED, DISCOVERY_STARTED, DISCOVERY_STOPPED, SERVICES_OBSERVED, ADAPTER_UNAVAILABLE, VEHICLE_SOCKET_CONNECTED, VEHICLE_MESSAGE_SENT, VEHICLE_SESSION_FAILED }
 data class DiagnosticEvent(val timeMillis: Long, val code: DiagnosticCode)
 
 /** Allowlisted event codes only. No raw packets, names, MACs, VINs, locations or exception text. */

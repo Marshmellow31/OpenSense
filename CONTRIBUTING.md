@@ -8,7 +8,7 @@ Use explicit claim labels: **verified**, **historical**, **needs-confirmation**,
 
 Vehicle profiles describe research candidates. Variant labels and model years do not guarantee a particular head unit. Supply the app family and a non-identifying description of the installed head unit when reporting compatibility.
 
-The current app has no vehicle socket or control path. Protocol integration requires a separate, reviewable change with source-derived framing, malformed-input handling, reproducible fixtures, and owner-authorized stationary vehicle evidence. Never silently replace the synthetic codec with a presumed vehicle protocol. Do not implement vehicle controls from guessed command bytes.
+Experimental vehicle sessions now exist separately from simulation; see docs/live-integration.md. Extend them only through reviewable source-derived framing, command/field evidence, malformed-input handling, reproducible fixtures and owner-authorized stationary vehicle validation. Never silently replace the synthetic codec with a vehicle protocol. Do not implement vehicle controls from guessed command bytes or claim synthetic tests establish real-car effects.
 
 ## Before submitting
 

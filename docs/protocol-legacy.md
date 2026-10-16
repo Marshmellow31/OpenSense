@@ -6,9 +6,11 @@ SHA-256 `ebdac117ac7e532079057bcda4a2de9bf4d9f0d1b6bfafbdd34fe3edc70d5231`.
 The archival APK's signature verifies; its publisher identity has not been independently
 authenticated. Neither original APK was installed or executed for this investigation.
 
-The independently authored `LegacyFrameDecoder` only accepts offline byte streams.
-It does not connect to a vehicle, transmit requests, authenticate, or convert packets
-to trusted dashboard readings. A car's year or trim cannot be selected reliably from
+The independently authored `LegacyFrameDecoder` accepts byte streams without owning
+Android transport. `VehicleSession` and `VehicleConnection` now use it for experimental
+live status/media integration; see [current implementation](live-integration.md).
+The decoder itself does not transmit or establish trusted readings.
+A car's year or trim cannot be selected reliably from
 these APK bytes alone. Users must choose the legacy infotainment profile explicitly
 until a hardware compatibility matrix exists.
 

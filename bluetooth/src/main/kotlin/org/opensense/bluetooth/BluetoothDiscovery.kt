@@ -21,7 +21,7 @@ import org.opensense.core.diagnostics.DiagnosticLog
 
 data class ObservedDevice(val id: String, val label: String, val paired: Boolean, val services: List<String> = emptyList())
 data class DiscoveryState(val devices: List<ObservedDevice> = emptyList(), val scanning: Boolean = false,
-    val message: String = "Ready. Vehicle protocol is unverified; data connection is disabled.")
+    val message: String = "Ready to discover nearby devices or explicitly connect a paired head unit.")
 
 /** Classic discovery/SDP only. No socket, pairing automation, GATT writes, or protocol commands. */
 class BluetoothDiscovery(context: Context, private val log: DiagnosticLog) {

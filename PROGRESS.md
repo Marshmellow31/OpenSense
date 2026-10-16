@@ -1,13 +1,151 @@
 # OpenSense progress
 
-Updated: 2026-10-16. State: **public research preview and static APK investigation**.
-Physical vehicle compatibility is not established.
-Implementation work was stopped at the user's request. The user subsequently
-authorized creating the public `Marshmellow31/OpenSense` repository and committing
-and pushing the independently authored project and documentation. This publication
-does not authorize further vehicle experiments or control commands.
+Updated: 2026-10-16. State: **portrait phone milestone and experimental live integration**.
+Physical vehicle compatibility is not established. After the UI pause and Bluetooth
+comparison, the user requested functional Bluetooth parity and said to continue.
+That authorizes this implementation; no actual vehicle experiment was performed.
+The user authorized finishing documentation and pushing this milestone to main.
+The earlier public CI artifact is historical; the new push triggers its own checks.
+
+## Current vehicle integration
+
+### Portrait phone feature expansion — day-end milestone
+
+The user subsequently requested the remaining phone features with Impeccable,
+portrait-only operation, private records/Android sharing and no cloud or Wear OS.
+[Phone feature scope](docs/phone-feature-parity.md) records functionality and bounds.
+
+- Implemented fuel diary/weighted full-to-full efficiency, reminder CRUD/lead times/
+  notifications/rescheduling, personal/vehicle fields, document/manual links,
+  explicit parked location/maps, foreground phone-GPS trip history, warning
+  preferences, assistance dial/share handoffs and non-identity export/deletion.
+- Added APK-derived current EcoSense fields and New BlueSense radio presets/band/
+  stored-frequency encoders. No original proprietary material was copied publicly.
+- Local JVM suite now **53 tests passed**. Build and app/Bluetooth lint pass.
+- Normal portrait: **17 tests passed** (five smoke, six live UI, six garage).
+  Compact portrait at 840×1680, 1.3× text: **six garage tests passed**.
+- Separate notification test passed for one synthetic due reminder and cancellation.
+  GPS runtime tests passed with host-injected non-zero emulator fixes, including
+  backgrounding the Activity: persisted a trip and stopped cleanly. An earlier zero-coordinate fixture run timed out;
+  real GPS, Doze and physical vehicle behavior are not established.
+- Impeccable reviewer opened all 38 native fixture screenshots: disposition **fix**.
+  Three material findings (compact Time button wrapping, internal route IDs in
+  app bars and unitless slider semantics) were applied in one batch. Corrected
+  six-test runs passed on both phone sizes, including slider adjustment/unit
+  semantics and date/time picker actions. The reviewer scored all three fixes
+  **resolved**, disposition **ship at that bounded scope**; no new whole-surface
+  review or physical TalkBack claim is made. Native screenshots/reports stay ignored.
+- Build/app lint/Bluetooth lint: pass, zero errors, 12 app warnings and two Bluetooth
+  warnings (including the user-requested fixed orientation and dependency/API hints).
+- OpenSenseUI emulator was stopped at the user's explicit day-end request.
+- This milestone is being saved to main with code, public findings and progress docs.
+  No original APKs, decompiled sources, private captures, test screenshots, local
+  tools, APK binaries, keys or user data are included. No PR/merge or store release.
+
+### Resume next time
+
+1. Use the latest successful GitHub Actions OpenSense-debug artifact or build from
+   main. The old successful artifact linked later in this file is historical.
+2. For the owner's first parked test choose **New BlueSense → W7** in Settings,
+   identify the exact head-unit model/firmware, pair normally, and verify incoming
+   status against the head-unit display before deliberately trying controls.
+3. Confirm radio/climate effects, units/sentinels, physical GPS/battery behavior,
+   document-provider access and reminder timing on an actual phone.
+4. Original automatic emergency/parking events, optional lounge-light firmware
+   selectors and historical EcoSense archive formats still need evidence. No cloud
+   or Wear OS work is planned under the confirmed scope.
+
+Final local evidence logs (ignored): garage-feature-build.log, garage-runtime-build.log,
+garage-review-fixes-build.log, garage-phone-tests.log, garage-compact-tests.log,
+garage-phone-capture-final.log, garage-review-fixes-phone.log,
+garage-review-fixes-compact.log, garage-gps-diagnosis.log and garage-gps-background.log.
+
+The prior integration summary below describes the immediately preceding milestone.
+
+- Both families now have explicit paired-device selection, proper public RFCOMM
+  socket factory/SPP UUID, startup/session messages and independent checked framing.
+- Legacy startup ACK triggers status queries and timed alert requests. New polling
+  receives a delayed reply/configuration request; busy status blocks commands.
+- Media actions, sources and volume use APK-derived encoders. Legacy volume maximum
+  is 45; newer is 30. New HVAC switches/fan/vent/Celsius temperature are implemented;
+  legacy climate remains status-only.
+- Separate nullable live data is displayed only in vehicle sessions; simulation
+  remains isolated. Stale sections expire even while unrelated messages arrive.
+- Disconnect/background/profile/simulation transitions close the socket and clear
+  data. Queues/delayed work are bounded; no automatic control replay/reconnection.
+- Command evidence, differences, remaining original features and parked test steps:
+  [docs/live-integration.md](docs/live-integration.md).
+- Local JVM suite: **43 passing tests** (28 existing plus 15 session/command tests).
+  Current local build and app/Bluetooth lint pass. The final APK passes **11 emulator
+  tests** at normal 1080×2400 and compact 840×1680 with 1.3× text, density 420.
+  Landscape verification is recorded below when complete.
+- The user confirmed **New BlueSense – XUV500** as the first hardware-test family.
+  The primary vehicle remains the 2018 W7; head-unit model/firmware are unconfirmed.
+- No original APK was run. No physical phone/head unit/car was tested. Full original
+  runtime equivalence and production readiness are not established.
+- Branch main, HEAD 4d67043771c70f7829ee1d0bca8e1e40ce586657. Changes remain local,
+  uncommitted/unpushed; no PR, merge or release was created for this work.
+
+Older sections below are historical baseline/handoff records, superseded above
+where they describe discovery-only behavior or the earlier stop request.
 
 ## Completed work
+
+### UI overhaul — 2026-10-16
+
+The user authorized implementing the agreed Impeccable/Material 3 redesign:
+single photographic XUV500 cutout on a platform, default dark theme, four main
+destinations, and simulation plus vehicle selection moved into Settings.
+
+- Vehicle opens directly; no first-run profile gate or dashboard demo-start button.
+- Vehicle, Climate, Media and Insights use Glacier Blue Material 3 dark/light roles.
+- Settings contains model/generation selection, local simulation and appearance.
+- Local demo controls change target temperature, fan/air direction/AC flags and
+  media source/track/playback/volume. They never send commands or play audio.
+- Connection, permission recovery and diagnostics remain accessible separately.
+- The CC0-source photo was edited into a transparent cutout; the user-requested
+  aftermarket roof-carrier removal is applied. See docs/assets/README.md for source
+  credit, original trim and both exact image-edit prompts.
+- A short-window icon rail fixes landscape navigation overflow. Each destination
+  owns its scroll state, avoiding Settings/profile scroll leaking into the dashboard.
+- Current fresh-emulator interaction suite: **five tests passed** on OpenSenseUI,
+  Android 16/API 36. Build and app lint pass. The final visual confirmation was
+  stopped at the user's request; the implementation is saved locally.
+- Existing protocol/transport code remains unchanged; real-vehicle compatibility
+  and controls remain unverified and unavailable.
+
+#### Paused UI handoff
+
+User requested stopping this work on 2026-10-16. No UI-overhaul commit or push was
+made. Public `main` remains the previously published baseline; local files contain
+the redesign and updated documentation.
+
+- Latest local APK: `app/build/outputs/apk/debug/app-debug.apk`, installed on the
+  dedicated `OpenSenseUI` Android 16 emulator (`emulator-5556` during this session).
+- The original Medium Phone AVD hit its low-storage threshold. A clean, dedicated
+  OpenSenseUI AVD was created; unrelated apps/data in the old AVD were preserved.
+- Tests/automation were stopped and emulator size/font overrides restored. The
+  dedicated emulator remains available; no recurring follow-up was scheduled.
+- Independent Impeccable review accepted phone visual direction and requested:
+  compact landscape task composition, scrollable media-source sheet, and intact
+  large-text airflow labels. All three code fixes are implemented, but final
+  reviewer scoring of the corrections is pending.
+- Latest code uses a compact landscape context header, complete car/platform or
+  primary controls in the first viewport, a scrollable fully expanded source
+  sheet, and wrapping 48 dp airflow chips. Demo/source-selection capture assertions
+  were updated for the compact header and all four media choices.
+- Latest build/lint log: `private-analysis/overhaul-sheet-ready.log` (passed).
+  Latest five-test interaction log: `private-analysis/overhaul-publish-smoke.log`
+  (passed). The `overhaul-publish-{phone,compact,landscape}.log` files record the
+  final capture attempt; do not assume every capture completed after the stop.
+- Earlier validated full captures are in `private-analysis/overhaul-final-captures/`;
+  these PRECEDE the three reviewer corrections. `overhaul-publish-captures/`, if
+  present, contains later captures and must be checked against completion logs.
+- Resume by confirming the latest three visual fixes in the emulator, obtaining
+  the bounded reviewer verdict, then refreshing DESIGN.md and README screenshots.
+  No additional UI refinement or vehicle commands were authorized by the stop.
+
+### Protocol foundation baseline
 
 - Inspected empty workspace, installed toolchain and missing APK inputs.
 - Researched distinct BlueSense packages and historical version/feature leads.

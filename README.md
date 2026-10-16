@@ -3,14 +3,16 @@
 [![Android checks](https://github.com/Marshmellow31/OpenSense/actions/workflows/android.yml/badge.svg)](https://github.com/Marshmellow31/OpenSense/actions/workflows/android.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-An independent, native Android research preview for Mahindra XUV500 owners. Choose a Legacy or New BlueSense vehicle profile, explore a clearly labelled simulated dashboard, and inspect nearby Classic Bluetooth services.
+An independent, native Android research preview for Mahindra XUV500 owners. A dark-first Material 3 garage view puts an illustrative XUV500 cutout on a platform, with dedicated Vehicle, Climate, Media and Insights screens. Vehicle profiles and optional simulation live in Settings.
 
 OpenSense is unofficial and is not affiliated with Mahindra or the original BlueSense developers.
 
 **Status: 0.1.0-dev · research preview.** The aim is a free, maintainable replacement
 for compatible XUV500 BlueSense installations. The current APK is a functional
-foundation with simulation and Bluetooth discovery; real vehicle telemetry and
-controls are not enabled. The primary owner test target is a **2018 XUV500 W7**.
+experimental compatibility build with separate Legacy and New BlueSense RFCOMM
+sessions, APK-derived status decoding and supported media/climate commands.
+**No physical head unit has been tested. Full original-app feature parity is not
+complete.** The primary owner test target is a **2018 XUV500 W7**.
 
 ## Progress at a glance
 
@@ -22,27 +24,40 @@ full handoff, remaining issues and validation boundaries.
 | Identify both original app families | Complete for two selected artifacts | Package/version, hashes, manifests and signing checks recorded |
 | Static whole-package analysis | Inventory and export complete; semantics partial | REA/JADX inspection plus Java/resources and Smali exports; decompiler limitations documented |
 | Bluetooth and framing investigation | Established from static APK paths | Classic SPP in both apps, with different packet formats; vehicle captures still needed |
-| Independent protocol decoders | Implemented and locally tested | Separate offline legacy/new decoders; no vehicle transmission |
-| Vehicle-family / variant selection | Implemented | Legacy and New BlueSense profiles; selection is not compatibility detection |
-| Simulated vehicle and app screens | Implemented | Dashboard, media/climate displays, feature states, diagnostics and settings |
+| Independent protocol decoders | Implemented and locally tested | Separate legacy/new decoders used by explicit vehicle sessions |
+| Vehicle-family / variant selection | Implemented in Settings | Legacy and New BlueSense profiles; selection is not compatibility detection |
+| Simulated vehicle and app screens | Implemented | Settings-only simulation entry, interactive local climate/media previews, feature states, diagnostics and settings |
 | Bluetooth discovery / service inspection | Implemented; physical radio validation pending | Permission-aware Classic discovery and standard SDP |
-| Local validation | Passing at current baseline | 28 JVM tests, 3 Python tests, 3 emulator UI tests; build and lint pass |
-| Public CI / development APK | Verified | [Successful Linux CI run](https://github.com/Marshmellow31/OpenSense/actions/runs/38847498840) builds/tests/lints and provides `OpenSense-debug` |
+| Private ownership tools | Implemented | Fuel diary, reminders, records, documents/manual, parking, GPS trips and assistance; [scope](docs/phone-feature-parity.md) |
+| Local validation | Passing | 53 JVM tests; 17 normal-phone tests; six garage tests at 1.3× text; separate notification and injected/background GPS checks |
+| Public CI / development APK | Check latest run | [Android checks](https://github.com/Marshmellow31/OpenSense/actions/workflows/android.yml) builds/tests/lints and provides `OpenSense-debug`; old artifact is historical |
 | Real head-unit compatibility | Pending | Exact head-unit/firmware identification and consented parked captures |
-| Vehicle controls | Disabled | Requires verified effects, hardware evidence and explicit owner approval |
-| UI polish | In progress | Small-screen / large-font navigation clipping; landscape checks remain |
+| Vehicle controls | Experimental implementation | Legacy media; newer media and HVAC; effects need parked hardware confirmation |
+| UI polish | Native review corrections resolved | Portrait, dark-first Material 3; normal/large-text captures; all three material fixes scored resolved |
 
 The table distinguishes static evidence, local test results and pending hardware
 proof. Neither original app was installed or executed during this investigation.
 
 ## What works today
 
-- Vehicle selection for the two historical BlueSense app families, followed by a variant choice. These are research profiles; selecting one does not establish compatibility.
+The phone expansion adds a portrait **Your garage** area: fuel
+diary/efficiency, dated reminder notifications, private owner/vehicle records,
+document/manual links, parked-car location/maps, foreground GPS trip history,
+warning preferences, assistance dial/share handoffs and non-identity export.
+New radio presets and APK-derived current EcoSense data are also implemented.
+[Feature-by-feature scope and remaining proof](docs/phone-feature-parity.md).
+The user chose private local storage and Android sharing, excluding cloud and Wear OS.
+
+- Vehicle selection for the two historical BlueSense app families under Settings, followed by a variant choice. These are research profiles; selecting one does not establish compatibility or block access to the dashboard.
 - Simulated fuel, range, climate, and door status with explicit simulation labels.
 - User-initiated Classic Bluetooth discovery and standard SDP service inspection, subject to Android permissions.
+- Explicit paired-head-unit RFCOMM sessions for each family, checked live messages,
+  expiring readings and APK-derived media/newer-HVAC commands. Hardware acceptance
+  is still unverified; [current scope and first test](docs/live-integration.md).
 - A feature catalogue that keeps unverified capabilities unavailable, theme preferences, and bounded in-memory diagnostic events.
+- Dark by default, with a persisted light-theme option, native Material icons and four portrait-phone tabs. A real-photo cutout has the background, registration text and aftermarket roof carrier removed; [asset provenance](docs/assets/README.md) records its CC0 source and image-edit prompts.
 
-**Vehicle communication remains unverified.** The app opens no vehicle socket, sends no vehicle control commands, and receives no real vehicle telemetry. The `SIM1` codec is an invented test format, not a recovered BlueSense protocol. Static APK findings do not prove vehicle behavior.
+**Vehicle communication remains unverified on hardware.** Settings → Bluetooth connection now lets you select a paired head unit and explicitly open the selected family's SPP socket. Startup/status messages are automatic within that session; supported media/HVAC commands are user-triggered. Stale values clear after 20 seconds; disconnect/background/profile changes clear the session. The `SIM1` demo remains isolated. See [what matches the originals and what remains](docs/live-integration.md).
 
 The two research targets are the original `com.visteon` app, version `0.46`, and `com.contus.mahindra.xuv500`, version `3.5`. Use the research documentation for evidence and provenance; package names alone do not authenticate a publisher. Neither original app needs to be installed to build or run OpenSense.
 
@@ -89,7 +104,7 @@ the standard SPP UUID, but their wire formats are different:
 | Legacy `com.visteon` 0.46 | Secure RFCOMM socket factory | `ED` / `EE` binary envelope, length field and CRC-16 |
 | New `com.contus.mahindra.xuv500` 3.5 | Insecure RFCOMM socket factory; legacy reflective fallback present | Nibble encoding with incoming 0x50 offset, length field and additive checksum |
 
-OpenSense implements the framing as **offline parsers**. Sharing an SPP UUID does
+OpenSense implements the framing as independently testable parsers. Sharing an SPP UUID does
 not make the profiles interchangeable. Exact session requirements, telemetry
 units, head-unit firmware behavior and per-variant support need corroborating
 captures. The specifications include class/method anchors and REA Evidence IDs:
@@ -105,40 +120,49 @@ Material 3, a view model, coroutines and Flow, with three Gradle modules:
 | Module | Responsibility |
 | --- | --- |
 | `app` | Screens, navigation, permissions, view model and theme/profile preferences |
-| `core` | Capability/data models, simulation, repository lifecycle, offline decoders and diagnostic event types |
-| `bluetooth` | Android Classic discovery and standard service discovery; no vehicle data socket |
+| `core` | Separate simulation/live models, framing, command encoders, session state and diagnostics |
+| `bluetooth` | Android Classic discovery/SDP, selected-family RFCOMM connection and bounded session lifetime |
 
 ```mermaid
 flowchart TD
-    A[Choose XUV500 app family and variant] --> B[Vehicle dashboard]
-    B --> C[Start simulated vehicle]
+    A[Launch app] --> B[Vehicle dashboard]
+    B --> S[Settings]
+    S --> P[Choose vehicle profile]
+    S --> C[Enable simulation]
     C --> D[Generated samples through mock transport]
     D --> E[Simulation decoder and repository]
     E --> F[Explicitly labelled simulated readings]
     B --> G[Open Connect and grant permission]
     G --> H[Classic discovery and optional SDP]
     H --> I[Observed devices and service UUIDs]
+    G --> L[Select paired head unit and connect explicitly]
+    L --> M[Selected-family RFCOMM and startup exchange]
+    M --> N[Checked live messages and expiring readings]
+    N --> O[Vehicle status and supported controls]
     J[Offline protocol tests] --> K[Legacy and New BlueSense decoders]
 ```
 
-**Simulation:** selecting Start simulated vehicle starts a cancellable sample
+**Simulation:** enabling Simulation in Settings starts a cancellable sample
 stream. The repository decodes the test-only `SIM1` format and publishes state to
 the UI. These values are generated locally; they do not come from a car. Stopping
 simulation, changing profiles or leaving the app clears the session/readings.
+Climate set-point/fan/airflow and media source/track/playback/volume changes are
+local preview state. The media screen does not play sound or control a head unit.
 
-**Bluetooth:** selecting discovery stops simulation, checks Android permissions,
-lists paired/nearby Classic devices and can request their standard SDP service
-UUIDs. Device labels are generic; pairing and identification happen in Android
-settings. OpenSense does not open an RFCOMM/GATT vehicle session or send startup,
-query, acknowledgment or control commands.
+**Bluetooth:** discovery/SDP and paired-head-unit selection are separate actions.
+Paired names are visible locally for deliberate selection, while discovery labels
+and diagnostic logs remain redacted. Connecting stops simulation, opens secure
+SPP for Legacy or insecure SPP for New BlueSense, sends startup/status requests,
+and interprets checksum-valid messages. Socket connection alone is not a successful
+application handshake. No BLE GATT or safety-critical ECU path is implemented.
 
 **Capabilities:** selecting a trim records research context. Unsupported vehicle
 features remain unavailable; demo support is labelled simulated. TPMS, EcoSense
 and parked-location support are not inferred from the car name or original UI.
 
-**Offline parsing:** the recovered framing decoders are libraries exercised by
-tests. They do not feed the dashboard or turn a checksum-valid packet into a
-trusted vehicle reading. The newer format requires a known frame boundary; its
+**Parsing:** the recovered framing decoders are libraries exercised by synthetic
+tests and used by the separate live session. Readings remain APK-derived until
+checked against hardware. The newer format requires a known frame boundary; its
 stream parser stops on alignment loss rather than guessing synchronization.
 
 **Storage and diagnostics:** only theme and selected vehicle profile persist.
@@ -187,29 +211,36 @@ On macOS/Linux, set `JAVA_HOME` and `ANDROID_HOME` to local installation paths a
 
 ## Explore the app
 
-1. Install your local debug build on a test phone and launch OpenSense.
-2. Select the app family your head unit originally used, choose its variant (or “Other / unsure”), and continue. Year alone cannot identify a replacement head unit.
-3. Select **Start simulated vehicle** to inspect generated examples. Stop simulation to clear the displayed data.
-4. For discovery, open **Connect**, grant Nearby devices permission on Android 12+, or Location permission on Android 8–11. Earlier Android versions may also require system Location to be enabled. Pairing and identification take place in Android settings.
-5. Change the selected profile or appearance under **Settings**. Leaving the app stops discovery and simulation; restarting either requires a user action.
+1. Install your local debug build on a test phone and launch OpenSense. The Vehicle screen opens directly; a fresh installation defaults to dark mode.
+2. Open the top-right **Settings** button to choose the app generation and variant (or “Other / unsure”). Year alone cannot identify a replacement head unit. A profile is optional for exploring the UI.
+3. In **Settings**, enable **Simulation** to explore generated readings and interactive climate/media previews. Disable it there to clear the demo session. No simulation-start button is placed on the main dashboard.
+4. For discovery, open the top-bar Bluetooth button or Settings → Bluetooth connection. Grant Nearby devices permission on Android 12+, or Location permission on Android 8–11. Earlier Android versions may also require system Location to be enabled. Pairing and identification take place in Android settings.
+5. For an experimental parked test, choose the correct generation in Settings, pair normally, then use Bluetooth connection → Refresh paired head units → Connect. Verify incoming messages and readings before trying supported controls. The first test sequence is in docs/live-integration.md.
+6. Use Vehicle, Climate, Media and Insights for the main app. Diagnostics is inside Connection; appearance and profile selection stay in Settings. Leaving the app stops discovery, simulation and vehicle sessions; reconnecting requires a user action.
 
 Discovery results use generic device labels. A listed device or returned UUID does not prove BlueSense support. Do not interpret simulated values as vehicle measurements.
 
 ## Validation and next milestones
 
-The recorded local baseline is **28 JVM tests**, **3 Python tests** and **3 Compose
+The historical public baseline was **28 JVM tests**, **3 Python tests** and **3 Compose
 UI tests** passing on an Android 16/API 36 emulator. App lint reported zero errors
 and six warnings; Bluetooth lint reported zero errors and two warnings. These are
 local results, distinct from the live CI badge above. The pipeline builds/lints
 and runs JVM/Python tests; it currently does not run the emulator UI suite.
 
+Current live-integration tests, build evidence and limits are recorded in
+[PROGRESS.md](PROGRESS.md) and [live integration](docs/live-integration.md).
+The old public CI artifact predates this milestone; select a successful run for
+the current main revision to download its development APK.
+
 Next milestones:
 
-- [ ] Fix navigation labels at 320 dp with larger fonts and complete landscape checks.
+- [x] Build portrait phone features and verify normal/large-text layouts; resolve the native review's material fixes.
 - [ ] Identify the primary W7's factory/replacement head unit and exact firmware.
 - [ ] Corroborate both framing specifications with authorized parked captures.
 - [ ] Confirm initialization effects, field validity, units and per-feature hardware.
-- [ ] Implement and validate a separate read-only vehicle repository.
+- [x] Implement separate explicit vehicle sessions, command encoders and expiring live data.
+- [ ] Validate those sessions, read mappings and command effects against actual head units.
 - [ ] Verify physical-phone permissions, radio coexistence and reconnection.
 - [ ] Enable individual features only after evidence-backed compatibility checks.
 
@@ -220,7 +251,12 @@ authentication bypass and safety-critical ECU access are outside this project sc
 
 ## Privacy and research materials
 
-The app has no Internet permission, account, analytics, or cloud sync. Only theme and selected vehicle profile preferences are persisted. Diagnostic events contain predefined codes and timestamps; device names, Bluetooth addresses, raw packets, and exception text are not written into that diagnostic record.
+The app has no Internet permission, account, analytics, or automatic cloud sync.
+Theme/profile and user-created garage records persist privately. Explicit parking
+location and user-started GPS trips also persist until removed; document links use
+user-granted provider access. Diagnostics contain enum codes/timestamps and exclude
+identifiers, raw packets, locations and exception text. Standard export excludes
+identity fields, documents, parking coordinates and GPS traces.
 
 Original APKs, decompiled source, packet captures, and private analysis stay outside public contributions. `apk-input/`, `private-analysis/`, and `tools-local/` are ignored. Do not attach those materials to public issues or releases. The optional static inventory utility is documented in [testing](docs/testing.md).
 

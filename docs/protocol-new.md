@@ -10,7 +10,9 @@ REA 6.5.0 with pinned JADX headless 0.7.1 inspected the APK without running it.
 The transport constant in `com.contus.mahindra.xuv500.utils.b` is SPP UUID
 `00001101-0000-1000-8000-00805F9B34FB`. Its inner connection thread `b.a` calls
 `createInsecureRfcommSocketToServiceRecord`. An IOException path tries the hidden
-`createRfcommSocket(1)` method reflectively. OpenSense does not reproduce this.
+`createRfcommSocket(1)` method reflectively. OpenSense does not reproduce this hidden
+fallback. Its experimental transport uses the same public insecure RFCOMM factory;
+see [current implementation and limits](live-integration.md).
 
 `utils.a.a(Context)` obtains Android's HEADSET profile and inspects connected
 devices, accepting the names `XUV500` or the `device_name_mahindra` resource value
@@ -38,8 +40,8 @@ The structural upper bound is 258 logical / 516 incoming wire bytes.
 
 `utils.o.a(String)` constructs **outgoing raw nibbles** from bit strings, and the
 socket write path passes them directly to `OutputStream.write`. The incoming
-0x50 offset must not be assumed in the outgoing direction. No outgoing encoder
-or command transmission is implemented in OpenSense.
+0x50 offset must not be assumed in the outgoing direction. `VehicleCommands` now
+implements independent outgoing encoders for reviewed startup/media/HVAC commands.
 
 There is no confirmed sync delimiter in this format. OpenSense's
 `NewBlueSenseStreamDecoder` requires a known initial frame boundary; it supports

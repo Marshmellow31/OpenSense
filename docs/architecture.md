@@ -1,38 +1,72 @@
 # Architecture
 
-OpenSense separates its Android interface, platform discovery, and platform-independent simulation logic. No module currently implements a real BlueSense data connection.
+OpenSense uses native Kotlin/Compose with three modules. Live integration is
+experimental and APK-derived; physical car and phone radio behavior are unverified.
 
-| Module | Responsibility | Boundary |
-| --- | --- | --- |
-| `app` | Compose screens, view model, user permissions, preference storage | Stores theme and selected vehicle profile only |
-| `bluetooth` | Classic discovery, paired-device listing, standard SDP UUID requests | No RFCOMM socket, GATT session, vehicle payload, or control API |
-| `core` | Models, capability states, synthetic codec/transport, simulation repository, diagnostics | JVM-testable; synthetic frames are never treated as vehicle data |
-| `tools` | Offline APK archive inventory and tests | Private input/output; never executes or installs APKs |
+| Module | Responsibility |
+| --- | --- |
+| app | Four Material 3 screens, Settings/Connection, permissions, ViewModel and preferences |
+| core | Separate simulation/live models, framing, encoders, sessions, expiry and diagnostics |
+| bluetooth | Classic discovery/SDP and explicit selected-family RFCOMM session lifetime |
 
-## User flow and state
+## Separate data paths
 
-On first launch, the user selects a Legacy or New BlueSense family and a variant. `VehicleProfile` validates the variant against the selected family's list. The selection is a research preference, not detection of the car's hardware or a proof of support. Settings allow the user to choose again.
+SimulationRepository accepts only SimulatedTransport/SIM1. DemoControls is local
+presentation state and never writes a socket. Simulation remains an explicit
+Settings option. VehicleSnapshot continues to mean simulated data only.
 
-`OpenSenseViewModel` owns simulation and Bluetooth discovery lifetimes. The dashboard starts without telemetry. Starting simulation obtains generated `VehicleSnapshot` values through `SimulatedTransport` and `SimulationRepository`; stopping it clears the current sample. Backgrounding the app stops active simulation and discovery. Reconnection is user-initiated at the app level.
+VehicleConnection creates a fresh VehicleSession for one selected family and
+paired head unit. VehicleSession uses LegacyFrameDecoder or NewBlueSenseStreamDecoder,
+applies supported fields to nullable LiveVehicle, and produces documented startup/status
+messages. VehicleCommands encodes allowlisted media/HVAC actions. There is no
+arbitrary hex editor, ECU or firmware API.
 
-The simulation repository exposes connection states and bounds automatic retry attempts within an active simulated session. A new decoder is created for each retry so a partial frame cannot cross session boundaries. Cancellation ends retries and disconnect clears stale data.
+LiveScreens renders live fields and supported controls. Unknowns remain blank.
+A command write never mutates a received reading. Raw codes, units and original
+length-based dispatch need hardware confirmation; see [integration](live-integration.md).
 
-## Codec and capability boundary
+## Connection and lifecycle
 
-`SimulationCodec` uses an invented newline-delimited `SIM1` format solely for demos and tests. Its stream decoder supports fragmented and concatenated input, validates fields, caps frames, and resynchronizes after oversized data. This format is not a recovered vehicle wire protocol. `VehicleProtocol` remains the fail-closed live integration boundary: it rejects input because hardware behavior is unverified.
+The app opens directly on Vehicle. Settings contains family/variant, simulation
+and appearance. Selection is a preference, not compatibility detection. Connection
+requests permissions, identifies paired head units locally, and offers explicit
+Connect/Disconnect. Discovery uses generic labels separately.
 
-`LegacyFrameDecoder` and `NewBlueSenseDecoder` are separate offline parsers for statically recovered APK framing. The legacy parser validates CRC-16 and resynchronizes on a bounded binary envelope. The newer parser validates incoming offset nibbles and an additive checksum; its stream adapter requires a known initial boundary and stops on alignment loss. Neither decoder connects to the simulation repository or the Android Bluetooth discovery component. A future real repository must carry separate provenance and field-validity rules. See [protocol](protocol.md).
+Legacy uses public secure RFCOMM/SPP; newer uses public insecure RFCOMM/SPP.
+The newer original's hidden channel fallback is not used. Sessions have a 15-second
+socket deadline, a protocol-specific initial startup allowance, 20-second receive
+timeout and individual 20-second reading expiry. New alignment failure closes the
+session. Reconnect is manual and never replays user controls.
 
-Capabilities distinguish simulated demonstrations from unverified real support. Feature controls remain unavailable where there is no verified implementation. Switching vehicle profiles does not enable a transport or control path.
+Writes use a bounded queue and one writer; scheduled work is capped and user
+commands have a 300 ms rate limit. Backgrounding, changing profile, starting
+simulation or disconnecting cancels work, closes the socket and clears data.
+Generation checks prevent old jobs from overwriting/closing a newer session.
+Permission revocation ends reception and blocks writes.
 
-## Bluetooth discovery
+## UI and storage
 
-`BluetoothDiscovery` requests the platform permissions appropriate to the Android version, observes paired and discovered Classic devices, and lets the user request standard SDP service metadata. It bounds the observed-device list and stops scanning after a timeout. It handles denied/revoked permissions and an unavailable adapter.
+The dark-first Glacier Blue Material theme and illustrative CC0 car cutout remain.
+Tabs are Vehicle/Climate/Media/Insights. The user now requests portrait-only phone
+operation; the manifest requests portrait. Routes have
+independent scrolling. Live and simulated state never share a decoder/model.
 
-Device addresses are used internally to deduplicate discovery results. UI records use session-local identifiers and generic labels. Diagnostic events receive predefined enums, never names, addresses, payloads, or exception strings. Returning an SDP UUID establishes only that the platform returned that metadata; it does not establish that a BlueSense protocol session can be opened or interpreted.
+Theme/profile and user-created garage records persist. Private AtomicFile JSON
+stores fuel, reminders, owner/vehicle records, document links, explicit parked
+location and GPS trip history. Document access uses user-granted provider URIs.
+TripService is a separately started location foreground service; it can continue
+while the Activity's Bluetooth session closes. ReminderReceiver schedules inexact
+alarms and private notifications and restores pending schedules after reboot.
+Vehicle identities, live telemetry, protocol buffers and diagnostics remain in memory.
+Diagnostics contain at most
+100 timestamped enum events, never raw packets or exception text. There is no
+Internet/account/analytics/cloud path.
 
-## Storage and future integration
+## Verification boundary
 
-Theme and vehicle profile preferences persist locally. Telemetry, discovery results, and bounded diagnostic events are memory-only. The app declares no Internet permission and has no account or analytics path.
-
-Any future real transport must be introduced separately from simulation, with its evidence and feature-specific verification visible to users. Protocol framing, reconnection, authorization, stale-data handling, diagnostics, and compatibility must be reviewed before changing the blocked vehicle-data state. Existing simulation tests cannot validate hardware or original-app behavior.
+JVM tests cover fixed command vectors, corruption/fragmentation, startup, missing
+fields, expiry, full-to-full fuel math and GPS estimate bounds. Emulator tests cover
+UI, private records, notification delivery and injected GPS recording with no radio
+peer. None establishes head-unit acceptance or physical-device effects. The existing
+public CI artifact predates the local UI/vehicle integration until deliberately
+committed, pushed and checked remotely.

@@ -8,7 +8,7 @@ sealed interface NewDecodeResult {
 }
 
 /** Incoming direction only: each logical nibble occupies one wire byte in 0x50..0x5f.
- * See docs/protocol-new.md. No encoder or Bluetooth connection is supplied.
+ * See docs/protocol-new.md. Encoders and Android transport are separate components.
  */
 object NewBlueSenseDecoder {
     const val MAX_WIRE_BYTES = 516

@@ -1,5 +1,21 @@
 # Testing and verification
 
+Current live integration is documented in [live-integration.md](live-integration.md).
+`VehicleSessionTest` adds fixed outgoing vectors, startup/polling, fragmentation,
+corruption, typed status and per-field expiry checks. `LiveUiTest` uses explicitly
+synthetic states and no Bluetooth peer to check legacy status-only climate, unit
+gating, unavailable media and no optimistic updates. These tests do not prove a
+physical vehicle connection or command effect.
+
+Phone expansion: `GarageTest` checks full-to-full fuel arithmetic and GPS estimate
+bounds. `GarageUiTest` uses synthetic records and restores the original dataset
+after each test; it exercises portrait-only configuration, CRUD, export exclusions,
+date/time controls, slider semantics and native screenshot fixtures. `ReminderDeliveryTest`
+posts/cancels only a synthetic app notification. `TripRecorderTest` waits for host
+emulator geo fixes and checks actual foreground-service persistence/stop behavior.
+Keep this last test separate from the ordinary suite: it requires coordinated
+emulator fix injection after `files/gps-test-ready` appears, not arbitrary real GPS.
+
 Run these checks from the repository root with the JDK and Android SDK configured as described in the README:
 
 ```powershell
@@ -8,6 +24,12 @@ python -m unittest discover -s tools -p 'test_*.py' -v
 ```
 
 Use `bash ./gradlew` on macOS/Linux. Kotlin test reports appear under `core/build/reports/tests/test/`; Android lint reports under the corresponding module's `build/reports/`. Report the actual command result and revision; the presence of this document or CI configuration does not mean those checks passed.
+
+Development APKs are not a stable signed release. CI does not configure a persistent
+signing key, so do not assume an artifact can update a different CI/local install.
+If Android rejects an update because signatures differ, preserve any records you
+need before considering uninstalling; uninstall removes private app data. The
+non-identity export is a reviewed record export, not a full identity/document/GPS backup.
 
 ## Automated coverage
 
@@ -26,13 +48,13 @@ The Android instrumentation source provides Compose smoke coverage. Execute it o
 .\gradlew.bat :app:connectedDebugAndroidTest
 ```
 
-Instrumentation must account for the initial vehicle-selection screen and persisted preferences. A compiled instrumentation APK does not prove that tests ran. The CI workflow intentionally performs build, lint, core, and Python checks without claiming physical-device or vehicle coverage.
+Instrumentation must account for Settings-only profile selection/simulation and persisted preferences. The home screen has no onboarding gate. A compiled instrumentation APK does not prove that tests ran. CI performs build, lint, core and Python checks without claiming physical-device or vehicle coverage.
 
 ## Manual device checklist
 
 | Area | Steps | Expected behavior |
 | --- | --- | --- |
-| First launch | Clear app data; choose each family and variant | Continue requires selection; chosen profile appears; compatibility stays unverified |
+| First launch | Fresh app; choose each family/variant through Settings | Dashboard opens directly; selection persists; compatibility stays unverified |
 | Persistence | Change profile and theme; restart app | Preferences restore without telemetry or discovery results |
 | Simulation | Start, stop, restart; background during an active demo | Values remain explicitly simulated; stop/background clears data; no automatic restart |
 | Permission denial | Deny permission; return from Android app settings after granting | Helpful recovery message; discovery starts only after user action |

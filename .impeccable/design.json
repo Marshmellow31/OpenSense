@@ -1,0 +1,501 @@
+{
+  "title": "Design System: OpenSense",
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-16T15:06:02.7846121Z",
+  "components": [
+    {
+      "kind": "button",
+      "description": "Native Material visual translation; browser sample is not native verification.",
+      "css": ".ds-button-primary {background:#A9C7FF;color:#12305C;border:none;border-radius:24px;min-height:48px;padding:10px 24px;font:500 14px/20px system-ui;} . {filter:brightness(1.08)} .ds-button-primary:focus-visible {outline:2px solid #A9C7FF;outline-offset:3px} .ds-button-primary:active {filter:brightness(.9)}",
+      "name": "Primary button",
+      "refersTo": "button-primary",
+      "html": "<button class='ds-button-primary'>Save records</button>"
+    },
+    {
+      "kind": "button",
+      "description": "Native Material visual translation; browser sample is not native verification.",
+      "css": ".ds-button-outlined {background:transparent;color:#A9C7FF;border:1px solid #8391A6;border-radius:24px;min-height:48px;padding:10px 24px;font:500 14px/20px system-ui;} . {filter:brightness(1.08)} .ds-button-outlined:focus-visible {outline:2px solid #A9C7FF;outline-offset:3px} .ds-button-outlined:active {filter:brightness(.9)}",
+      "name": "Outlined button",
+      "refersTo": "button-outlined",
+      "html": "<button class='ds-button-outlined'>Save records</button>"
+    },
+    {
+      "kind": "button",
+      "description": "Native Material visual translation; browser sample is not native verification.",
+      "css": ".ds-button-text {background:transparent;color:#A9C7FF;border:none;border-radius:24px;min-height:48px;padding:10px 24px;font:500 14px/20px system-ui;} . {filter:brightness(1.08)} .ds-button-text:focus-visible {outline:2px solid #A9C7FF;outline-offset:3px} .ds-button-text:active {filter:brightness(.9)}",
+      "name": "Text button",
+      "refersTo": "button-text",
+      "html": "<button class='ds-button-text'>Save records</button>"
+    },
+    {
+      "kind": "input",
+      "description": "Labelled full-width record field; native geometry comes from Material defaults.",
+      "css": ".ds-field{display:grid;gap:8px;color:#B5C0D1;font:14px/20px system-ui}.ds-field input{background:#0C111A;color:#E3E8F2;border:1px solid #8391A6;border-radius:4px;padding:16px;font:16px/24px system-ui;min-height:24px}.ds-field input:hover{border-color:#E3E8F2}.ds-field input:focus-visible{outline:2px solid #A9C7FF;outline-offset:1px}",
+      "name": "Outlined field",
+      "refersTo": "input",
+      "html": "<label class='ds-field'>Odometer (km)<input inputmode='decimal' placeholder='Enter odometer'></label>"
+    },
+    {
+      "kind": "nav",
+      "description": "Compact main navigation; hidden on task routes.",
+      "css": ".ds-nav{display:flex;background:#18212E;padding:12px 0;gap:4px}.ds-nav button{flex:1;min-height:48px;background:transparent;color:#B5C0D1;border:0;border-radius:20px;font:500 12px/16px system-ui}.ds-nav button[aria-current]{background:#294775;color:#D8E5FF}.ds-nav button:hover{background:#273344}.ds-nav button:focus-visible{outline:2px solid #A9C7FF}.ds-nav button:active{filter:brightness(.9)}",
+      "name": "Four destinations",
+      "refersTo": "navigation",
+      "html": "<nav class='ds-nav' aria-label='Main'><button aria-current='page'>Vehicle</button><button>Climate</button><button>Media</button><button>Insights</button></nav>"
+    },
+    {
+      "kind": "chip",
+      "description": "Wrapping reminder lead choice.",
+      "css": ".ds-chip{min-height:48px;border:1px solid #8391A6;border-radius:8px;padding:8px 16px;background:#303E54;color:#D8E3F8;font:500 14px/20px system-ui}.ds-chip:hover{filter:brightness(1.08)}.ds-chip:focus-visible{outline:2px solid #A9C7FF;outline-offset:3px}.ds-chip:active{filter:brightness(.9)}",
+      "name": "Lead-time chip",
+      "refersTo": "chip",
+      "html": "<button class='ds-chip' aria-pressed='true'>1 hour before</button>"
+    },
+    {
+      "kind": "card",
+      "description": "A coherent summary or action, not a wrapper for every list row.",
+      "css": ".ds-panel{padding:20px;border-radius:16px;background:#18212E;color:#E3E8F2;display:grid;gap:12px;font:16px/24px system-ui}.ds-panel h3{margin:0;font:400 22px/28px system-ui}.ds-panel p{margin:0;color:#B5C0D1}",
+      "name": "Tonal panel",
+      "refersTo": "tonal-panel",
+      "html": "<section class='ds-panel'><h3>Every fill tells a story</h3><p>Your fuel diary turns full-tank entries into measured efficiency.</p></section>"
+    },
+    {
+      "kind": "custom",
+      "description": "Open list row with subtitle and chevron; vector icons stay native in the app.",
+      "css": ".ds-row{display:flex;align-items:center;justify-content:space-between;gap:14px;width:100%;min-height:64px;padding:12px 0;background:transparent;color:#E3E8F2;border:0;border-bottom:1px solid #364355;text-align:left;font:16px/24px system-ui}.ds-row strong{font-weight:400}.ds-row small{display:block;color:#B5C0D1;font:12px/16px system-ui;margin-top:3px}.ds-row:hover{background:#121B27}.ds-row:focus-visible{outline:2px solid #A9C7FF}.ds-row:active{background:#212D3D}",
+      "name": "Garage detail row",
+      "refersTo": "detail-row",
+      "html": "<button class='ds-row'><span><strong>Fuel diary</strong><small>Full-to-full efficiency</small></span><svg width='20' height='20' viewBox='0 0 24 24' aria-hidden='true'><path d='m9 6 6 6-6 6' fill='none' stroke='currentColor' stroke-width='2'/></svg></button>"
+    }
+  ],
+  "narrative": {
+    "overview": "OpenSense extends the user-approved Glacier Blue Material 3 world established on 16 October 2026. A real XUV500 cutout rests on a low oval platform on Vehicle; quiet headings, aligned readings, tonal actions and grouped status rows make it an automotive companion. The image is illustrative, not proof of a selected variant's equipment. Retain the existing asset; 3D remains deferred.\n\nThe built ownership extension uses the same world for private phone records: full task routes, readable forms, grouped lists and useful empty states. Material 3 supplies native structure and interaction. Dark is the fresh-install default; an explicit light choice persists. This remains a portrait-only phone product with Vehicle, Climate, Media and Insights as its four main destinations. Vehicle generation, simulation and appearance remain in Settings without an onboarding gate. Private phone storage and deliberate Android handoffs constrain the interface; cloud accounts and Wear OS are outside the confirmed scope.",
+    "dos": [
+      "Do preserve the real XUV500 cutout/platform and the four Material destinations.",
+      "Do use Material roles, system type scaling, readable units and vector icons.",
+      "Do let date/time actions and reminder chips wrap with complete labels.",
+      "Do label phone estimates, manual records, simulation and head-unit data distinctly.",
+      "Do preserve scrolling, native Back and visible recovery actions."
+    ],
+    "northStar": "A calm garage display",
+    "keyCharacteristics": [
+      "Glacier Blue actions on midnight tonal surfaces, with a separate cloud-light scheme.",
+      "System Material typography, vector icons and native controls.",
+      "A photographic vehicle signature with restrained diagrammatic data elsewhere.",
+      "Scrollable ownership routes with honest source, permission and empty-state language."
+    ],
+    "donts": [
+      "Don't replace the established world or add vehicle imagery to every ownership form.",
+      "Don't expose internal route keys or UUIDs as app-bar titles.",
+      "Don't leave adjustable controls without focused purpose and value/unit descriptions.",
+      "Don't imply Android handoffs prove completion.",
+      "Don't claim synthetic/emulator evidence verifies physical-device or vehicle behavior."
+    ],
+    "rules": [
+      {
+        "section": "colors",
+        "body": "Keep simulated, phone-derived, manually entered and head-unit values visibly distinguishable; color alone is insufficient.",
+        "name": "The Source Clarity Rule"
+      },
+      {
+        "section": "typography",
+        "body": "App bars show “Trip details”, “Edit fill-up” and “Edit reminder” for record routes; never expose internal route keys or record IDs as titles.",
+        "name": "The Human Context Rule"
+      }
+    ]
+  },
+  "extensions": {
+    "shadows": [],
+    "typographyMeta": {
+      "body": {
+        "displayName": "Material body",
+        "purpose": "Record text and explanations; native inherited scale."
+      },
+      "headline": {
+        "displayName": "Material headline",
+        "purpose": "Garage introductions and measurements; native inherited scale."
+      }
+    },
+    "breakpoints": [
+      {
+        "value": "600dp",
+        "name": "adaptive-source",
+        "purpose": "Existing rail branch, not expanded product support."
+      }
+    ],
+    "previewNotes": "Self-contained HTML/CSS translations of native patterns. Browser metrics are illustrative and not normative Compose dimensions. Synthesized OKLCH tonal ramps are panel metadata, not app palette additions. Native evidence is in r2-phone and r2-compact.",
+    "motion": [
+      {
+        "value": "Inherited Material interactions; airflow follows system Remove animations",
+        "name": "native-motion",
+        "purpose": "No new ownership motion tokens."
+      }
+    ],
+    "colorMeta": {
+      "light-surface-container-high": {
+        "displayName": "light surface container high",
+        "role": "neutral",
+        "tonalRamp": [
+          "oklch(15% 0.0184 258.35)",
+          "oklch(26% 0.0184 258.35)",
+          "oklch(38% 0.0184 258.35)",
+          "oklch(49% 0.0184 258.35)",
+          "oklch(61% 0.0184 258.35)",
+          "oklch(72% 0.0184 258.35)",
+          "oklch(84% 0.0184 258.35)",
+          "oklch(95% 0.0184 258.35)"
+        ]
+      },
+      "on-surface": {
+        "displayName": "on surface",
+        "role": "neutral",
+        "tonalRamp": [
+          "oklch(15% 0.0146 264.50)",
+          "oklch(26% 0.0146 264.50)",
+          "oklch(38% 0.0146 264.50)",
+          "oklch(49% 0.0146 264.50)",
+          "oklch(61% 0.0146 264.50)",
+          "oklch(72% 0.0146 264.50)",
+          "oklch(84% 0.0146 264.50)",
+          "oklch(95% 0.0146 264.50)"
+        ]
+      },
+      "surface-container-high": {
+        "displayName": "surface container high",
+        "role": "neutral",
+        "tonalRamp": [
+          "oklch(15% 0.0337 255.79)",
+          "oklch(26% 0.0337 255.79)",
+          "oklch(38% 0.0337 255.79)",
+          "oklch(49% 0.0337 255.79)",
+          "oklch(61% 0.0337 255.79)",
+          "oklch(72% 0.0337 255.79)",
+          "oklch(84% 0.0337 255.79)",
+          "oklch(95% 0.0337 255.79)"
+        ]
+      },
+      "light-background": {
+        "displayName": "light background",
+        "role": "neutral",
+        "tonalRamp": [
+          "oklch(15% 0.0070 268.55)",
+          "oklch(26% 0.0070 268.55)",
+          "oklch(38% 0.0070 268.55)",
+          "oklch(49% 0.0070 268.55)",
+          "oklch(61% 0.0070 268.55)",
+          "oklch(72% 0.0070 268.55)",
+          "oklch(84% 0.0070 268.55)",
+          "oklch(95% 0.0070 268.55)"
+        ]
+      },
+      "light-surface": {
+        "displayName": "light surface",
+        "role": "neutral",
+        "tonalRamp": [
+          "oklch(15% 0.0054 274.97)",
+          "oklch(26% 0.0054 274.97)",
+          "oklch(38% 0.0054 274.97)",
+          "oklch(49% 0.0054 274.97)",
+          "oklch(61% 0.0054 274.97)",
+          "oklch(72% 0.0054 274.97)",
+          "oklch(84% 0.0054 274.97)",
+          "oklch(95% 0.0054 274.97)"
+        ]
+      },
+      "outline-variant": {
+        "displayName": "outline variant",
+        "role": "neutral",
+        "tonalRamp": [
+          "oklch(15% 0.0353 256.59)",
+          "oklch(26% 0.0353 256.59)",
+          "oklch(38% 0.0353 256.59)",
+          "oklch(49% 0.0353 256.59)",
+          "oklch(61% 0.0353 256.59)",
+          "oklch(72% 0.0353 256.59)",
+          "oklch(84% 0.0353 256.59)",
+          "oklch(95% 0.0353 256.59)"
+        ]
+      },
+      "error": {
+        "displayName": "error",
+        "role": "neutral",
+        "tonalRamp": [
+          "oklch(15% 0.0891 26.76)",
+          "oklch(26% 0.0891 26.76)",
+          "oklch(38% 0.0891 26.76)",
+          "oklch(49% 0.0891 26.76)",
+          "oklch(61% 0.0891 26.76)",
+          "oklch(72% 0.0891 26.76)",
+          "oklch(84% 0.0891 26.76)",
+          "oklch(95% 0.0891 26.76)"
+        ]
+      },
+      "on-primary": {
+        "displayName": "on primary",
+        "role": "primary",
+        "tonalRamp": [
+          "oklch(15% 0.0865 258.21)",
+          "oklch(26% 0.0865 258.21)",
+          "oklch(38% 0.0865 258.21)",
+          "oklch(49% 0.0865 258.21)",
+          "oklch(61% 0.0865 258.21)",
+          "oklch(72% 0.0865 258.21)",
+          "oklch(84% 0.0865 258.21)",
+          "oklch(95% 0.0865 258.21)"
+        ]
+      },
+      "light-outline-variant": {
+        "displayName": "light outline variant",
+        "role": "neutral",
+        "tonalRamp": [
+          "oklch(15% 0.0236 258.36)",
+          "oklch(26% 0.0236 258.36)",
+          "oklch(38% 0.0236 258.36)",
+          "oklch(49% 0.0236 258.36)",
+          "oklch(61% 0.0236 258.36)",
+          "oklch(72% 0.0236 258.36)",
+          "oklch(84% 0.0236 258.36)",
+          "oklch(95% 0.0236 258.36)"
+        ]
+      },
+      "surface-container": {
+        "displayName": "surface container",
+        "role": "neutral",
+        "tonalRamp": [
+          "oklch(15% 0.0282 257.53)",
+          "oklch(26% 0.0282 257.53)",
+          "oklch(38% 0.0282 257.53)",
+          "oklch(49% 0.0282 257.53)",
+          "oklch(61% 0.0282 257.53)",
+          "oklch(72% 0.0282 257.53)",
+          "oklch(84% 0.0282 257.53)",
+          "oklch(95% 0.0282 257.53)"
+        ]
+      },
+      "primary-container": {
+        "displayName": "primary container",
+        "role": "primary",
+        "tonalRamp": [
+          "oklch(15% 0.0861 258.69)",
+          "oklch(26% 0.0861 258.69)",
+          "oklch(38% 0.0861 258.69)",
+          "oklch(49% 0.0861 258.69)",
+          "oklch(61% 0.0861 258.69)",
+          "oklch(72% 0.0861 258.69)",
+          "oklch(84% 0.0861 258.69)",
+          "oklch(95% 0.0861 258.69)"
+        ]
+      },
+      "on-surface-variant": {
+        "displayName": "on surface variant",
+        "role": "neutral",
+        "tonalRamp": [
+          "oklch(15% 0.0269 259.05)",
+          "oklch(26% 0.0269 259.05)",
+          "oklch(38% 0.0269 259.05)",
+          "oklch(49% 0.0269 259.05)",
+          "oklch(61% 0.0269 259.05)",
+          "oklch(72% 0.0269 259.05)",
+          "oklch(84% 0.0269 259.05)",
+          "oklch(95% 0.0269 259.05)"
+        ]
+      },
+      "surface": {
+        "displayName": "surface",
+        "role": "neutral",
+        "tonalRamp": [
+          "oklch(15% 0.0222 260.47)",
+          "oklch(26% 0.0222 260.47)",
+          "oklch(38% 0.0222 260.47)",
+          "oklch(49% 0.0222 260.47)",
+          "oklch(61% 0.0222 260.47)",
+          "oklch(72% 0.0222 260.47)",
+          "oklch(84% 0.0222 260.47)",
+          "oklch(95% 0.0222 260.47)"
+        ]
+      },
+      "outline": {
+        "displayName": "outline",
+        "role": "neutral",
+        "tonalRamp": [
+          "oklch(15% 0.0353 258.37)",
+          "oklch(26% 0.0353 258.37)",
+          "oklch(38% 0.0353 258.37)",
+          "oklch(49% 0.0353 258.37)",
+          "oklch(61% 0.0353 258.37)",
+          "oklch(72% 0.0353 258.37)",
+          "oklch(84% 0.0353 258.37)",
+          "oklch(95% 0.0353 258.37)"
+        ]
+      },
+      "on-primary-container": {
+        "displayName": "on primary container",
+        "role": "primary",
+        "tonalRamp": [
+          "oklch(15% 0.0382 264.37)",
+          "oklch(26% 0.0382 264.37)",
+          "oklch(38% 0.0382 264.37)",
+          "oklch(49% 0.0382 264.37)",
+          "oklch(61% 0.0382 264.37)",
+          "oklch(72% 0.0382 264.37)",
+          "oklch(84% 0.0382 264.37)",
+          "oklch(95% 0.0382 264.37)"
+        ]
+      },
+      "tertiary-container": {
+        "displayName": "tertiary container",
+        "role": "tertiary",
+        "tonalRamp": [
+          "oklch(15% 0.0612 80.24)",
+          "oklch(26% 0.0612 80.24)",
+          "oklch(38% 0.0612 80.24)",
+          "oklch(49% 0.0612 80.24)",
+          "oklch(61% 0.0612 80.24)",
+          "oklch(72% 0.0612 80.24)",
+          "oklch(84% 0.0612 80.24)",
+          "oklch(95% 0.0612 80.24)"
+        ]
+      },
+      "surface-container-low": {
+        "displayName": "surface container low",
+        "role": "neutral",
+        "tonalRamp": [
+          "oklch(15% 0.0272 255.81)",
+          "oklch(26% 0.0272 255.81)",
+          "oklch(38% 0.0272 255.81)",
+          "oklch(49% 0.0272 255.81)",
+          "oklch(61% 0.0272 255.81)",
+          "oklch(72% 0.0272 255.81)",
+          "oklch(84% 0.0272 255.81)",
+          "oklch(95% 0.0272 255.81)"
+        ]
+      },
+      "secondary": {
+        "displayName": "secondary",
+        "role": "secondary",
+        "tonalRamp": [
+          "oklch(15% 0.0371 261.28)",
+          "oklch(26% 0.0371 261.28)",
+          "oklch(38% 0.0371 261.28)",
+          "oklch(49% 0.0371 261.28)",
+          "oklch(61% 0.0371 261.28)",
+          "oklch(72% 0.0371 261.28)",
+          "oklch(84% 0.0371 261.28)",
+          "oklch(95% 0.0371 261.28)"
+        ]
+      },
+      "secondary-container": {
+        "displayName": "secondary container",
+        "role": "secondary",
+        "tonalRamp": [
+          "oklch(15% 0.0426 259.27)",
+          "oklch(26% 0.0426 259.27)",
+          "oklch(38% 0.0426 259.27)",
+          "oklch(49% 0.0426 259.27)",
+          "oklch(61% 0.0426 259.27)",
+          "oklch(72% 0.0426 259.27)",
+          "oklch(84% 0.0426 259.27)",
+          "oklch(95% 0.0426 259.27)"
+        ]
+      },
+      "tertiary": {
+        "displayName": "tertiary",
+        "role": "tertiary",
+        "tonalRamp": [
+          "oklch(15% 0.0918 80.65)",
+          "oklch(26% 0.0918 80.65)",
+          "oklch(38% 0.0918 80.65)",
+          "oklch(49% 0.0918 80.65)",
+          "oklch(61% 0.0918 80.65)",
+          "oklch(72% 0.0918 80.65)",
+          "oklch(84% 0.0918 80.65)",
+          "oklch(95% 0.0918 80.65)"
+        ]
+      },
+      "light-primary": {
+        "displayName": "light primary",
+        "role": "primary",
+        "tonalRamp": [
+          "oklch(15% 0.1065 257.18)",
+          "oklch(26% 0.1065 257.18)",
+          "oklch(38% 0.1065 257.18)",
+          "oklch(49% 0.1065 257.18)",
+          "oklch(61% 0.1065 257.18)",
+          "oklch(72% 0.1065 257.18)",
+          "oklch(84% 0.1065 257.18)",
+          "oklch(95% 0.1065 257.18)"
+        ]
+      },
+      "light-on-surface": {
+        "displayName": "light on surface",
+        "role": "neutral",
+        "tonalRamp": [
+          "oklch(15% 0.0339 259.58)",
+          "oklch(26% 0.0339 259.58)",
+          "oklch(38% 0.0339 259.58)",
+          "oklch(49% 0.0339 259.58)",
+          "oklch(61% 0.0339 259.58)",
+          "oklch(72% 0.0339 259.58)",
+          "oklch(84% 0.0339 259.58)",
+          "oklch(95% 0.0339 259.58)"
+        ]
+      },
+      "light-on-surface-variant": {
+        "displayName": "light on surface variant",
+        "role": "neutral",
+        "tonalRamp": [
+          "oklch(15% 0.0354 256.11)",
+          "oklch(26% 0.0354 256.11)",
+          "oklch(38% 0.0354 256.11)",
+          "oklch(49% 0.0354 256.11)",
+          "oklch(61% 0.0354 256.11)",
+          "oklch(72% 0.0354 256.11)",
+          "oklch(84% 0.0354 256.11)",
+          "oklch(95% 0.0354 256.11)"
+        ]
+      },
+      "primary": {
+        "displayName": "primary",
+        "role": "primary",
+        "tonalRamp": [
+          "oklch(15% 0.0857 262.68)",
+          "oklch(26% 0.0857 262.68)",
+          "oklch(38% 0.0857 262.68)",
+          "oklch(49% 0.0857 262.68)",
+          "oklch(61% 0.0857 262.68)",
+          "oklch(72% 0.0857 262.68)",
+          "oklch(84% 0.0857 262.68)",
+          "oklch(95% 0.0857 262.68)"
+        ]
+      },
+      "background": {
+        "displayName": "background",
+        "role": "neutral",
+        "tonalRamp": [
+          "oklch(15% 0.0204 261.93)",
+          "oklch(26% 0.0204 261.93)",
+          "oklch(38% 0.0204 261.93)",
+          "oklch(49% 0.0204 261.93)",
+          "oklch(61% 0.0204 261.93)",
+          "oklch(72% 0.0204 261.93)",
+          "oklch(84% 0.0204 261.93)",
+          "oklch(95% 0.0204 261.93)"
+        ]
+      },
+      "light-surface-container": {
+        "displayName": "light surface container",
+        "role": "neutral",
+        "tonalRamp": [
+          "oklch(15% 0.0132 262.38)",
+          "oklch(26% 0.0132 262.38)",
+          "oklch(38% 0.0132 262.38)",
+          "oklch(49% 0.0132 262.38)",
+          "oklch(61% 0.0132 262.38)",
+          "oklch(72% 0.0132 262.38)",
+          "oklch(84% 0.0132 262.38)",
+          "oklch(95% 0.0132 262.38)"
+        ]
+      }
+    }
+  }
+}

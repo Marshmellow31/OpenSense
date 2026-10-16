@@ -1,6 +1,12 @@
 # Security reporting
 
-OpenSense is a research preview. It currently implements simulation and Classic Bluetooth discovery/SDP, with no vehicle socket or vehicle control commands. Discovery still interacts with Android's Bluetooth stack and must respect permissions and lifecycle boundaries.
+OpenSense is an experimental compatibility build. It implements simulation, Classic discovery/SDP and explicit selected-family RFCOMM sessions with startup/status and supported media/HVAC commands. Vehicle effects have not been tested on hardware. Permissions, bounded parsing, lifecycle cancellation, write allowlists and expiry are security-relevant; see docs/live-integration.md.
+
+The phone feature expansion stores user-created records and requested GPS history
+privately with AtomicFile. Document links use explicit provider grants. Trip GPS
+uses a user-started foreground service; reminders use inexact alarms/notifications.
+Standard export excludes identity fields, linked documents, parked coordinates
+and GPS traces. Do not attach private records or precise coordinates to public issues.
 
 ## Report privately
 

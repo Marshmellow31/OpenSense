@@ -2,9 +2,10 @@
 
 As of 2026-10-16, two distinct protocol families have **verified static APK evidence**.
 Neither has been verified with a vehicle capture or a physical Android phone.
-OpenSense implements independent **offline decoders** for both families. Its Bluetooth
-screen performs discovery/SDP only; it opens no vehicle data socket and sends no
-application protocol commands. The simulated dashboard is a separate code path.
+OpenSense implements independent decoders and experimental explicit RFCOMM sessions
+for both families. Startup, status and supported control paths now use those
+decoders; hardware compatibility remains unverified. The simulated dashboard is a
+separate code path. See [current integration and differences](live-integration.md).
 
 ## Evidence and confidence vocabulary
 
