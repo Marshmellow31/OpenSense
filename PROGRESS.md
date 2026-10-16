@@ -5,7 +5,10 @@ Physical vehicle compatibility is not established. After the UI pause and Blueto
 comparison, the user requested functional Bluetooth parity and said to continue.
 That authorizes this implementation; no actual vehicle experiment was performed.
 The user authorized finishing documentation and pushing this milestone to main.
-The earlier public CI artifact is historical; the new push triggers its own checks.
+Source commit **24a8ec87440221298a0501b943ce732a0c681236** was pushed and
+verified against remote main. The earlier public CI artifact is historical.
+[Milestone CI run 38921437206](https://github.com/Marshmellow31/OpenSense/actions/runs/38921437206)
+was **in progress at the day-end handoff**, not yet a verified remote pass.
 
 ## Current vehicle integration
 
@@ -38,7 +41,7 @@ portrait-only operation, private records/Android sharing and no cloud or Wear OS
 - Build/app lint/Bluetooth lint: pass, zero errors, 12 app warnings and two Bluetooth
   warnings (including the user-requested fixed orientation and dependency/API hints).
 - OpenSenseUI emulator was stopped at the user's explicit day-end request.
-- This milestone is being saved to main with code, public findings and progress docs.
+- This milestone is saved to main with code, public findings and progress docs.
   No original APKs, decompiled sources, private captures, test screenshots, local
   tools, APK binaries, keys or user data are included. No PR/merge or store release.
 
