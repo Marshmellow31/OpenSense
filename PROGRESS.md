@@ -65,7 +65,9 @@ alongside theme choice and establishes no compatibility.
 - No physical phone, Bluetooth head unit, packet capture or vehicle test performed.
 - CI configuration builds/lints, runs JVM/Python tests, and uploads only the
   independently authored OpenSense development APK after successful checks.
-  Remote CI status will be recorded after the initial push.
+  Initial remote run reached SDK setup, then failed because the setup action
+  requested the obsolete `tools` package. Its package selection was corrected to
+  `platform-tools`; the next run will establish remote build results.
 
 ## Unverified assumptions and blockers
 
@@ -91,10 +93,19 @@ reproducible evidence.
 
 ## Repository / release state
 
-Public repository preparation is in progress on `main`. The user explicitly
-authorized repository creation, commits and push on 2026-10-16. Original APKs,
-decompiled proprietary outputs, private analysis/captures, local tools and secrets
-remain excluded. No PR/merge or release is required for this initial publication.
+Public repository: [Marshmellow31/OpenSense](https://github.com/Marshmellow31/OpenSense).
+Initial project commit: `95054cc40334ec2cbd4b16893af823596b0f5b43`, pushed to
+`main` and verified against the remote branch. Repository visibility and default
+branch were confirmed as PUBLIC and `main`. The user explicitly authorized creation,
+commits and push on 2026-10-16. No PR/merge, release or Play Store publication was
+performed. Original APKs, decompiled proprietary outputs, private analysis/captures,
+local tools, generated local builds and secrets remain excluded from Git. CI can
+publish only its own OpenSense debug build as a time-limited workflow artifact.
+
+README now explains the research method, artifact-analysis limits, protocol
+differences, APK operation/data flows, build/download instructions, local test
+results and a progress/next-milestone checklist. Local build/lint and Python checks
+were rerun before publication; all passed. JVM reports contain 28 passing tests.
 
 ## Resume handoff
 
