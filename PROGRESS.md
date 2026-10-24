@@ -1,5 +1,51 @@
 # OpenSense progress
 
+## 24 October 2026 — first GitHub prerelease verification
+
+**Verified locally:** development APK build, app/Bluetooth lint (zero errors;
+12 app warnings, two Bluetooth warnings), 53 freshly rerun JVM tests and three
+Python tests. Android 16/API 36 emulator results: 20 normal-phone tests
+(smoke, live UI, garage, diagnostics and reminder delivery), 13 compact-phone
+tests (smoke, garage and diagnostics at 840×1680, density 420, 1.3× text), and one
+background GPS recording test with injected non-zero locations. All final runs
+passed. Normal/compact fixture screenshots were sampled for visual fit; this is
+not a new exhaustive UI or accessibility review. The recovered emulator's crash
+buffer was empty after these runs.
+
+Added two instrumentation tests that prove automatic diagnostic events appear,
+can be cleared, and record a failed connection without showing the supplied device
+identifier. App runtime code is unchanged from the previous milestone. Corrected
+README storage wording and added `docs/tester-handoff.md` for first-owner testing.
+
+The first emulator attempt was aborted after Android displayed a system-process
+ANR during severe host memory pressure. A cold boot with lower memory allocation
+and direct instrumentation recovered the test environment. The first GPS fixture
+timed out with one point; pre-seeding its nearby starting position before route
+injection produced a passing repeat. Neither failed setup attempt is counted as a
+passing test or proof of physical GPS behavior. Private logs remain under
+`private-analysis/tester-readiness-*` and are not published.
+
+The APK is `org.opensense.app`, version `0.1.0-dev` / code 1, minimum API 26,
+target API 37, debug signed. APK signature verification passed. SHA-256:
+`8e048046227ab73736a621b3a4deab1e06bf21d7a8deed93d46bc5044d793a8a`.
+Stable signing/version upgrades remain future distribution work.
+
+**Needs-confirmation:** actual head-unit identity/firmware, Bluetooth session and
+handshake, incoming mappings/units, physical media/HVAC effects, phone permissions,
+GPS/battery behavior, notification timing and external provider handoffs. Full
+original-app parity remains incomplete. Diagnostics are enabled but only retain
+100 in-memory enum/timestamp events; there is no diagnostic export or persistent
+crash report. The tester must capture Connection and Session diagnostics screens
+before restarting. Granular receive/timeout/disconnect reason logging remains a
+follow-up if protocol diagnosis requires it.
+
+The previous application commit's remote CI run `38921437206` is now verified
+successful. This verification/handoff change is intended for the first
+`v0.1.0-dev` GitHub prerelease, explicitly marked experimental. Release publication
+and the CI result for this documentation/test commit must be checked on GitHub.
+
+---
+
 Updated: 2026-10-16. State: **portrait phone milestone and experimental live integration**.
 Physical vehicle compatibility is not established. After the UI pause and Bluetooth
 comparison, the user requested functional Bluetooth parity and said to continue.

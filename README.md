@@ -16,7 +16,7 @@ complete.** The primary owner test target is a **2018 XUV500 W7**.
 
 ## Progress at a glance
 
-Last evidence update: **16 October 2026**. See [PROGRESS.md](PROGRESS.md) for the
+Last evidence update: **24 October 2026**. See [PROGRESS.md](PROGRESS.md) for the
 full handoff, remaining issues and validation boundaries.
 
 | Workstream | Progress | Evidence / remaining work |
@@ -29,7 +29,7 @@ full handoff, remaining issues and validation boundaries.
 | Simulated vehicle and app screens | Implemented | Settings-only simulation entry, interactive local climate/media previews, feature states, diagnostics and settings |
 | Bluetooth discovery / service inspection | Implemented; physical radio validation pending | Permission-aware Classic discovery and standard SDP |
 | Private ownership tools | Implemented | Fuel diary, reminders, records, documents/manual, parking, GPS trips and assistance; [scope](docs/phone-feature-parity.md) |
-| Local validation | Passing | 53 JVM tests; 17 normal-phone tests; six garage tests at 1.3× text; separate notification and injected/background GPS checks |
+| Local validation | Passing | 53 JVM and three Python tests; 20 normal-phone tests; 13 compact-phone tests at 1.3× text; separate injected/background GPS check |
 | Public CI / development APK | Check latest run | [Android checks](https://github.com/Marshmellow31/OpenSense/actions/workflows/android.yml) builds/tests/lints and provides `OpenSense-debug`; old artifact is historical |
 | Real head-unit compatibility | Pending | Exact head-unit/firmware identification and consented parked captures |
 | Vehicle controls | Experimental implementation | Legacy media; newer media and HVAC; effects need parked hardware confirmation |
@@ -165,11 +165,20 @@ tests and used by the separate live session. Readings remain APK-derived until
 checked against hardware. The newer format requires a known frame boundary; its
 stream parser stops on alignment loss rather than guessing synchronization.
 
-**Storage and diagnostics:** only theme and selected vehicle profile persist.
-Diagnostic events contain predefined codes and timestamps, are capped at 100
-entries, and stay in memory. There is no account, analytics or cloud service.
+**Storage and diagnostics:** theme, selected vehicle profile and user-created
+garage records persist privately. Diagnostic events contain predefined codes and
+timestamps, are capped at 100 entries, and stay in memory. They have no file export
+or automatic upload and disappear when the app process ends. There is no account,
+analytics or cloud service. For testing and returning useful feedback, follow the
+[first tester handoff](docs/tester-handoff.md).
 
 ## Get a development APK
+
+For the first experimental tester build, use the
+[GitHub prerelease](https://github.com/Marshmellow31/OpenSense/releases/tag/v0.1.0-dev)
+and follow the [tester handoff](docs/tester-handoff.md). Diagnostics are enabled
+automatically but must be captured before restarting the app. Physical head-unit
+compatibility is still unverified.
 
 Build locally using the instructions below, or open
 [Android checks in GitHub Actions](https://github.com/Marshmellow31/OpenSense/actions/workflows/android.yml).
