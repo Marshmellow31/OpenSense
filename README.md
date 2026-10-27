@@ -14,6 +14,19 @@ sessions, APK-derived status decoding and supported media/climate commands.
 **No physical head unit has been tested. Full original-app feature parity is not
 complete.** The primary owner test target is a **2018 XUV500 W7**.
 
+## Screenshots
+
+Captured from the actual Android app on an emulator on **27 October 2026**,
+at **1080 × 2400**, 420 dpi and normal (1.0×) text size. Populated vehicle,
+climate and media screens use the app's simulation mode. **No vehicle was
+connected; these images do not establish real head-unit compatibility.**
+
+| Vehicle · demo | Climate · demo | Media · demo | Insights · demo |
+| --- | --- | --- | --- |
+| ![Vehicle dashboard with explicitly simulated range and fuel](docs/screenshots/2026-10-27/vehicle-demo-dark.webp) | ![Simulated cabin temperature and fan controls](docs/screenshots/2026-10-27/climate-dark.webp) | ![Media screen with simulated playback paused](docs/screenshots/2026-10-27/media-dark.webp) | ![Insights screen in emulator simulation mode](docs/screenshots/2026-10-27/insights-dark.webp) |
+
+[All eight WebP captures, settings and reproduction details](docs/screenshots/2026-10-27/README.md).
+
 ## Progress at a glance
 
 Last evidence update: **24 October 2026**. See [PROGRESS.md](PROGRESS.md) for the
