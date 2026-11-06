@@ -1,4 +1,5 @@
 plugins { id("com.android.application"); id("org.jetbrains.kotlin.plugin.compose") }
+base.archivesName.set("XUV 500")
 android {
     namespace = "org.opensense.app"
     compileSdk = 37

@@ -44,8 +44,8 @@ class MainActivity : ComponentActivity() {
 
 private data class Destination(val name: String, val icon: ImageVector)
 private val destinations = listOf(
-    Destination("Vehicle", Icons.Outlined.DirectionsCar), Destination("Climate", Icons.Outlined.Air),
-    Destination("Media", Icons.Outlined.MusicNote), Destination("Insights", Icons.Outlined.Insights),
+    Destination("Home", Icons.Outlined.Home), Destination("Cabin", Icons.Outlined.Air),
+    Destination("Trips", Icons.Outlined.Route), Destination("Garage", Icons.Outlined.Garage),
 )
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -63,7 +63,8 @@ fun OpenSenseApp(model: OpenSenseViewModel) {
             else SystemBarStyle.light(android.graphics.Color.TRANSPARENT, android.graphics.Color.TRANSPARENT)
         activity?.enableEdgeToEdge(statusBarStyle = style, navigationBarStyle = style)
     }
-    var tab by rememberSaveable { mutableStateOf("Vehicle") }
+    var tab by rememberSaveable { mutableStateOf("Home") }
+    var cabin by rememberSaveable { mutableStateOf("Climate") }
     var route by rememberSaveable { mutableStateOf<String?>(null) }
     val requestedRoute by model.routeRequest.collectAsStateWithLifecycle()
     LaunchedEffect(requestedRoute) { requestedRoute?.let { route = it; model.routeRequest.value = null } }
@@ -71,7 +72,7 @@ fun OpenSenseApp(model: OpenSenseViewModel) {
     fun back() {
         route = when { route == "Diagnostics" -> "Connection"; route == "Vehicle profile" -> "Settings"; route != null && isGarageRoute(route!!) -> garageParent(route!!); else -> null }
     }
-    BackHandler(enabled = route != null || tab != "Vehicle") { if (route != null) back() else tab = "Vehicle" }
+    BackHandler(enabled = route != null || tab != "Home") { if (route != null) back() else tab = "Home" }
     val permission = rememberLauncherForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
         if (model.bluetooth.hasPermissions()) model.discover() else model.bluetooth.permissionDenied()
     }
@@ -81,11 +82,11 @@ fun OpenSenseApp(model: OpenSenseViewModel) {
             val short = wide && maxHeight < 480.dp
             Scaffold(
                 topBar = {
-                    TopAppBar(title = {
+                    if (route != null || short || liveSession) TopAppBar(title = {
                         if (short && route == null) Column {
-                            Text(if (tab == "Vehicle") "My XUV500" else tab, Modifier.testTag("screen-title"), style = MaterialTheme.typography.titleLarge)
+                            Text(if (tab == "Home") "My XUV500" else tab, Modifier.testTag("screen-title"), style = MaterialTheme.typography.titleLarge)
                             Text("${profile?.variant ?: "XUV500"} · ${if (liveSession) "Vehicle session" else if (sample != null) "Demo · no vehicle connected" else "Offline"}", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                        } else Text(when {
+                        } else if (route == null) Text("") else Text(when {
                             route?.startsWith("Trip:") == true -> "Trip details"
                             route?.startsWith("Fuel:") == true -> "Edit fill-up"
                             route?.startsWith("Reminder:") == true -> "Edit reminder"
@@ -98,18 +99,13 @@ fun OpenSenseApp(model: OpenSenseViewModel) {
                                 IconButton(onClick = { route = "Connection" }) { Icon(Icons.Outlined.Bluetooth, "Connection details") }
                                 IconButton(onClick = { route = "Settings" }) { Icon(Icons.Outlined.Settings, "Settings") }
                             }
-                        }, colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background))
+                        }, colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background, scrolledContainerColor = MaterialTheme.colorScheme.background))
                 },
                 bottomBar = {
-                    if (!wide && route == null) NavigationBar(containerColor = MaterialTheme.colorScheme.surfaceContainer) {
-                        destinations.forEach { destination ->
-                            NavigationBarItem(selected = tab == destination.name, onClick = { tab = destination.name }, modifier = Modifier.testTag("nav-${destination.name}"),
-                                icon = { Icon(destination.icon, null) }, label = { Text(destination.name, maxLines = 1) })
-                        }
-                    }
+                    if (!wide && route == null) HomeNav(destinations.map { it.name to it.icon }, tab) { tab = it }
                 }
             ) { padding ->
-                Row(Modifier.fillMaxSize().padding(padding)) {
+                Row(Modifier.fillMaxSize().padding(padding).then(if (route == null && !short && !liveSession) Modifier.statusBarsPadding() else Modifier)) {
                     if (wide && route == null) {
                         if (short) {
                             Column(Modifier.width(72.dp).fillMaxHeight(), verticalArrangement = Arrangement.SpaceEvenly, horizontalAlignment = Alignment.CenterHorizontally) {
@@ -132,16 +128,24 @@ fun OpenSenseApp(model: OpenSenseViewModel) {
                         verticalArrangement = Arrangement.spacedBy(if (short) 16.dp else 24.dp)) {
                         if (route == null) {
                             if (liveSession) {
-                                Text(if (tab == "Vehicle") "My XUV500" else tab, Modifier.testTag("screen-title"), style = MaterialTheme.typography.headlineMedium)
-                                if (tab == "Insights") GarageInsights(model) { route = it }
-                                else LiveScreen(tab, live, profile, model)
+                                Text(if (tab == "Home") "My XUV500" else tab, Modifier.testTag("screen-title"), style = MaterialTheme.typography.headlineMedium)
+                                when (tab) {
+                                    "Trips" -> GarageInsights(model) { route = it }
+                                    "Garage" -> GarageHub(model) { route = it }
+                                    "Cabin" -> { Segmented(listOf("Climate", "Media"), cabin) { cabin = it }; LiveScreen(cabin, live, profile, model) }
+                                    else -> LiveScreen("Vehicle", live, profile, model)
+                                }
                             } else {
-                            if (!short) ScreenHeading(tab, profile?.label ?: "XUV500", sample != null) { route = "Connection" }
+                            if (!short) ScreenHeading(tab, profile?.label ?: "XUV500", sample != null, { route = "Settings" }) { route = "Connection" }
                             when (tab) {
-                                "Vehicle" -> VehicleScreen(sample, controls, wide, short, { tab = it }, { route = it })
-                                "Climate" -> ClimateScreen(sample, controls, wide, short, model::changeDemo)
-                                "Media" -> MediaScreen(sample, controls, short, model::changeDemo)
-                                "Insights" -> GarageInsights(model) { route = it }
+                                "Home" -> VehicleScreen(sample, controls, wide, short, { tab = it }, { route = it })
+                                "Cabin" -> {
+                                    Segmented(listOf("Climate", "Media"), cabin) { cabin = it }
+                                    if (cabin == "Climate") ClimateScreen(sample, controls, wide, short, model::changeDemo)
+                                    else MediaScreen(sample, controls, short, model::changeDemo)
+                                }
+                                "Trips" -> GarageInsights(model) { route = it }
+                                "Garage" -> GarageHub(model) { route = it }
                             }
                             }
                         } else when (route) {

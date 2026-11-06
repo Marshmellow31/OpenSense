@@ -25,7 +25,7 @@ class SmokeTest {
         rule.onNodeWithText("My XUV500").assertIsDisplayed()
         rule.onNodeWithText("Choose your XUV500").assertDoesNotExist()
         rule.onNodeWithContentDescription("Simulation mode").assertDoesNotExist()
-        rule.onNodeWithTag("nav-Climate").assertExists()
+        rule.onNodeWithTag("nav-Cabin").assertExists()
         settings()
         rule.onNodeWithContentDescription("Simulation mode").assertExists()
         rule.onNodeWithText("Your vehicle").assertExists()
@@ -43,12 +43,12 @@ class SmokeTest {
     }
 
     @Test fun climateAndMediaRespondOnlyInDemo() {
-        rule.onNodeWithTag("nav-Climate").performClick()
+        rule.onNodeWithTag("nav-Cabin").performClick()
         rule.onNodeWithContentDescription("Increase temperature").assertIsNotEnabled()
         demo()
         rule.onNodeWithContentDescription("Increase temperature").performScrollTo().performClick()
         rule.onNodeWithTag("target-temperature").assertTextEquals("23°")
-        rule.onNodeWithTag("nav-Media").performClick()
+        rule.onNodeWithTag("nav-Cabin").performClick(); rule.onNodeWithTag("seg-Media").performClick()
         rule.onNodeWithContentDescription("Play demo playback").performScrollTo().performClick()
         rule.onNodeWithText("Simulated playback · Playing").assertExists()
         rule.onNodeWithContentDescription("Next demo track").performClick()

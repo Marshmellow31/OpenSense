@@ -41,7 +41,7 @@ class TripService : Service(), LocationListener {
         manager.createNotificationChannel(NotificationChannel("trip-recording", "Trip recording", NotificationManager.IMPORTANCE_LOW))
         val open = PendingIntent.getActivity(this, 0, Intent(this, MainActivity::class.java).putExtra("route", "Trips"), PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
         val stop = PendingIntent.getService(this, 1, Intent(this, TripService::class.java).setAction("STOP"), PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
-        val notification = Notification.Builder(this, "trip-recording").setSmallIcon(R.drawable.ic_opensense).setContentTitle("Recording your trip")
+        val notification = Notification.Builder(this, "trip-recording").setSmallIcon(R.drawable.ic_launcher_monochrome).setContentTitle("Recording your trip")
             .setContentText("Phone GPS · tap to view or stop recording").setContentIntent(open).setOngoing(true)
             .addAction(Notification.Action.Builder(null, "Stop trip", stop).build()).build()
         try {

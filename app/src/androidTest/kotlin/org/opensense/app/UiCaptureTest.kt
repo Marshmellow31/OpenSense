@@ -21,7 +21,7 @@ class UiCaptureTest {
             name.startsWith("climate") -> rule.onNodeWithTag("screen-title").assertTextEquals("Climate")
             name.startsWith("media-sources") -> rule.onNodeWithText("Demo media source").assertExists()
             name.startsWith("media") -> rule.onNodeWithTag("screen-title").assertTextEquals("Media")
-            name.startsWith("insights") -> rule.onNodeWithTag("screen-title").assertTextEquals("Insights")
+            name.startsWith("insights") -> rule.onNodeWithTag("screen-title").assertTextEquals("Trips")
         }
         if (name in listOf("vehicle-offline-dark", "vehicle-demo-dark", "climate-dark", "media-dark", "insights-dark", "vehicle-light", "climate-light")) {
             rule.onNodeWithTag("screen-title").assertIsDisplayed()
@@ -50,13 +50,13 @@ class UiCaptureTest {
         capture("vehicle-demo-dark")
         rule.onNodeWithText("Warnings").performScrollTo()
         capture("vehicle-status-dark")
-        rule.onNodeWithTag("nav-Climate").assertIsDisplayed().performClick()
+        rule.onNodeWithTag("nav-Cabin").assertIsDisplayed().performClick()
         capture("climate-dark")
         rule.onNodeWithText("Both").performScrollTo()
         capture("climate-direction-dark")
         rule.onNodeWithText("Demist").performScrollTo()
         capture("climate-controls-dark")
-        rule.onNodeWithTag("nav-Media").assertIsDisplayed().performClick()
+        rule.onNodeWithTag("nav-Cabin").assertIsDisplayed().performClick(); rule.onNodeWithTag("seg-Media").performClick()
         capture("media-dark")
         rule.onNodeWithText("Source · Bluetooth").performScrollTo().performClick()
         capture("media-sources-dark")
@@ -69,7 +69,7 @@ class UiCaptureTest {
             rule.onNodeWithText(source).performScrollTo().assertIsDisplayed().performClick()
             currentSource = source
         }
-        rule.onNodeWithTag("nav-Insights").assertIsDisplayed().performClick()
+        rule.onNodeWithTag("nav-Trips").assertIsDisplayed().performClick()
         capture("insights-dark")
         rule.onNodeWithContentDescription("Settings").performClick()
         capture("settings-dark")
@@ -77,9 +77,9 @@ class UiCaptureTest {
         capture("settings-appearance-dark")
         rule.onNodeWithContentDescription("Dark theme").performScrollTo().performClick()
         rule.onNodeWithContentDescription("Back").performClick()
-        rule.onNodeWithTag("nav-Vehicle").assertIsDisplayed().performClick()
+        rule.onNodeWithTag("nav-Home").assertIsDisplayed().performClick()
         capture("vehicle-light")
-        rule.onNodeWithTag("nav-Climate").assertIsDisplayed().performClick()
+        rule.onNodeWithTag("nav-Cabin").assertIsDisplayed().performClick()
         capture("climate-light")
         rule.runOnUiThread { ViewModelProvider(rule.activity)[OpenSenseViewModel::class.java].apply { pause(); setDark(true) } }
     }

@@ -1,6 +1,8 @@
 package org.opensense.app.ui
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -36,8 +38,8 @@ import org.opensense.core.model.VehicleSnapshot
             val platformHeight = imageHeight * .19f
             val top = imageTop + imageHeight * .94f - platformHeight + 4.dp.toPx()
             val left = (size.width - imageWidth * .95f) / 2f
-            drawOval(colors.surfaceContainerHigh.copy(alpha = 0.3f), Offset(left + 6.dp.toPx(), top + 8.dp.toPx()), Size(imageWidth * .91f, platformHeight))
-            drawOval(colors.surfaceContainerHigh, Offset(left, top), Size(imageWidth * .95f, platformHeight))
+            drawOval(colors.tertiaryContainer.copy(alpha = 0.55f), Offset(left + 6.dp.toPx(), top + 8.dp.toPx()), Size(imageWidth * .91f, platformHeight))
+            drawOval(colors.surfaceContainerLow, Offset(left, top), Size(imageWidth * .95f, platformHeight))
             drawArc(colors.outlineVariant, 0f, 180f, false, Offset(left, top), Size(imageWidth * .95f, platformHeight), style = Stroke(1.dp.toPx()))
         }
         Image(painterResource(R.drawable.xuv500_cutout), "Illustrative XUV500 exterior; not live vehicle status",
@@ -56,46 +58,46 @@ import org.opensense.core.model.VehicleSnapshot
 }
 
 @Composable fun VehicleScreen(sample: VehicleSnapshot?, controls: DemoControls, wide: Boolean, short: Boolean, tab: (String) -> Unit, details: (String) -> Unit) {
+    val colors = MaterialTheme.colorScheme
+    val readings: @Composable (Modifier) -> Unit = { m ->
+        Row(m.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(20.dp)) {
+            Reading("Estimated range", sample?.rangeKm?.toString() ?: "—", "km", Modifier.weight(1f), compact = short)
+            Column(Modifier.weight(1f)) {
+                Reading("Fuel", sample?.fuelPercent?.toString() ?: "—", "%", compact = short)
+                Spacer(Modifier.height(10.dp))
+                Box(Modifier.fillMaxWidth().height(5.dp).background(colors.surfaceContainerHighest, CircleShape)) {
+                    sample?.fuelPercent?.let { Box(Modifier.fillMaxWidth(it / 100f).fillMaxHeight().background(colors.primary, CircleShape)) }
+                }
+            }
+        }
+    }
     if (wide) Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(32.dp)) {
         CarStage(Modifier.weight(1.2f), if (short) 180.dp else 240.dp)
         Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(if (short) 10.dp else 20.dp)) {
-            Reading("Estimated range", sample?.rangeKm?.toString() ?: "—", "km", compact = short)
-            Reading("Fuel level", sample?.fuelPercent?.toString() ?: "—", "%", compact = short)
+            readings(Modifier)
             StateNote(sample != null, "No vehicle data. Connection details are available above.")
         }
     } else {
-        CarStage()
-        Row(Modifier.fillMaxWidth().padding(horizontal = 8.dp), horizontalArrangement = Arrangement.spacedBy(20.dp)) {
-            Reading("Estimated range", sample?.rangeKm?.toString() ?: "—", "km", Modifier.weight(1f))
-            Reading("Fuel level", sample?.fuelPercent?.toString() ?: "—", "%", Modifier.weight(1f))
+        CarStage(height = 230.dp)
+        TonalPanel {
+            readings(Modifier)
+            StateNote(sample != null, "No vehicle data · waiting for a verified connection")
         }
-        StateNote(sample != null, "No vehicle data · waiting for a verified connection")
     }
-    Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-        Surface(onClick = { tab("Climate") }, modifier = Modifier.weight(1f), shape = RoundedCornerShape(16.dp), color = MaterialTheme.colorScheme.primaryContainer) {
-            Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                Icon(Icons.Outlined.Air, null)
-                Text("Cabin climate", style = MaterialTheme.typography.titleSmall)
-                Text(sample?.let { "${controls.target}° target" } ?: "Not connected", style = MaterialTheme.typography.bodyMedium)
-            }
-        }
-        Surface(onClick = { tab("Media") }, modifier = Modifier.weight(1f), shape = RoundedCornerShape(16.dp), color = MaterialTheme.colorScheme.surfaceContainer) {
-            Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                Icon(Icons.Outlined.MusicNote, null, tint = MaterialTheme.colorScheme.primary)
-                Text("Your media", style = MaterialTheme.typography.titleSmall)
-                Text(if (sample == null) "Not connected" else if (controls.playing) "Demo playing" else "Demo paused", style = MaterialTheme.typography.bodyMedium)
-            }
-        }
+    Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+        Tile(Icons.Outlined.NearMe, "Find my car", "Parked place", Modifier.weight(1f)) { details("Parked car") }
+        Tile(Icons.Outlined.LocalGasStation, "Add fuel", "Log a fill-up", Modifier.weight(1f)) { details("Add fuel") }
+        Tile(Icons.Outlined.Route, "Start trip", "Phone GPS", Modifier.weight(1f), accent = true) { tab("Trips") }
     }
     Column {
         Section("Vehicle status")
-        DetailRow(Icons.Outlined.Garage, "Your garage", "Fuel diary, trips, documents & reminders", onClick = { details("Your garage") })
-        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
         DetailRow(Icons.Outlined.DoorFront, "Doors", if (sample != null) "Simulated · all doors closed" else "Status unknown", onClick = { details("Doors") })
-        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+        HorizontalDivider(color = colors.outlineVariant)
         DetailRow(Icons.Outlined.TireRepair, "Tyre pressure", "Hardware support unconfirmed", onClick = { details("Tyre pressure") })
-        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+        HorizontalDivider(color = colors.outlineVariant)
         DetailRow(Icons.Outlined.WarningAmber, "Warnings", "No verified warning data", onClick = { details("Warnings") })
+        HorizontalDivider(color = colors.outlineVariant)
+        DetailRow(Icons.Outlined.Air, "Cabin", if (sample != null) "${controls.target}° target · ${if (controls.playing) "media playing" else "media paused"} (demo)" else "Climate and media need a connection", onClick = { tab("Cabin") })
     }
 }
 

@@ -16,6 +16,7 @@ import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
@@ -67,17 +68,29 @@ import org.opensense.core.model.VehicleSnapshot
     val active = sample != null
     if (!short) StateNote(active)
     val temperature: @Composable () -> Unit = {
-        Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(if (short) 5.dp else 14.dp)) {
-            Text("Target temperature", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(if (short) 12.dp else 22.dp)) {
-                FilledTonalIconButton(onClick = { change { it.copy(target = (it.target - 1).coerceAtLeast(16)) } }, enabled = active && controls.target > 16,
-                    modifier = Modifier.size(if (short) 48.dp else 52.dp)) { Icon(Icons.Outlined.Remove, "Decrease temperature") }
-                Text(if (active) "${controls.target}°" else "—°", Modifier.testTag("target-temperature"), style = if (short) MaterialTheme.typography.displaySmall else MaterialTheme.typography.displayLarge, fontWeight = FontWeight.Light)
-                FilledTonalIconButton(onClick = { change { it.copy(target = (it.target + 1).coerceAtMost(30)) } }, enabled = active && controls.target < 30,
-                    modifier = Modifier.size(if (short) 48.dp else 52.dp)) { Icon(Icons.Outlined.Add, "Increase temperature") }
+        val colors = MaterialTheme.colorScheme
+        Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(if (short) 5.dp else 12.dp)) {
+            Box(Modifier.size(if (short) 150.dp else 236.dp), contentAlignment = Alignment.Center) {
+                Surface(shape = CircleShape, color = colors.surfaceContainerLow, modifier = Modifier.fillMaxSize()) {}
+                Canvas(Modifier.fillMaxSize().padding(10.dp)) {
+                    val stroke = 6.dp.toPx()
+                    val arcSize = Size(size.width - stroke, size.height - stroke); val tl = Offset(stroke / 2, stroke / 2)
+                    drawArc(colors.surfaceContainerHighest, 135f, 270f, false, tl, arcSize, style = Stroke(stroke, cap = StrokeCap.Round))
+                    if (active) drawArc(colors.primary, 135f, 270f * ((controls.target - 16) / 14f).coerceIn(0.02f, 1f), false, tl, arcSize, style = Stroke(stroke, cap = StrokeCap.Round))
+                }
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text("Target temperature", style = MaterialTheme.typography.bodySmall, color = colors.onSurfaceVariant)
+                    Text(if (active) "${controls.target}°" else "—°", Modifier.testTag("target-temperature"), style = if (short) MaterialTheme.typography.displaySmall else MaterialTheme.typography.displayLarge)
+                    Text("Cabin ${sample?.cabinCelsius?.let { "$it°" } ?: "—"}  ·  Outside ${sample?.outsideCelsius?.let { "$it°" } ?: "—"}",
+                        style = MaterialTheme.typography.bodySmall, color = colors.onSurfaceVariant)
+                }
             }
-            Text("Cabin ${sample?.cabinCelsius?.let { "$it°" } ?: "—"}   ·   Outside ${sample?.outsideCelsius?.let { "$it°" } ?: "—"}",
-                style = if (short) MaterialTheme.typography.bodySmall else MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Row(horizontalArrangement = Arrangement.spacedBy(if (short) 12.dp else 16.dp)) {
+                FilledTonalIconButton(onClick = { change { it.copy(target = (it.target - 1).coerceAtLeast(16)) } }, enabled = active && controls.target > 16,
+                    modifier = Modifier.size(56.dp)) { Icon(Icons.Outlined.Remove, "Decrease temperature") }
+                FilledIconButton(onClick = { change { it.copy(target = (it.target + 1).coerceAtMost(30)) } }, enabled = active && controls.target < 30,
+                    modifier = Modifier.size(56.dp)) { Icon(Icons.Outlined.Add, "Increase temperature") }
+            }
         }
     }
     if (wide) Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
@@ -125,9 +138,10 @@ import org.opensense.core.model.VehicleSnapshot
 }
 
 @Composable private fun ControlButton(label: String, icon: ImageVector, selected: Boolean, enabled: Boolean, modifier: Modifier, click: () -> Unit) {
-    FilledTonalButton(onClick = click, modifier = modifier.heightIn(min = 80.dp), enabled = enabled, contentPadding = PaddingValues(12.dp),
-        colors = ButtonDefaults.filledTonalButtonColors(containerColor = if (selected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceContainer,
-            contentColor = if (selected) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurface)) {
+    FilledTonalButton(onClick = click, modifier = modifier.heightIn(min = 84.dp), enabled = enabled, contentPadding = PaddingValues(12.dp), shape = androidx.compose.foundation.shape.RoundedCornerShape(22.dp),
+        border = if (selected) null else androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+        colors = ButtonDefaults.filledTonalButtonColors(containerColor = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceContainerLow,
+            contentColor = if (selected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface)) {
         Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Icon(icon, null, Modifier.size(22.dp)); Text(label, textAlign = TextAlign.Center)
         }
@@ -141,14 +155,14 @@ import org.opensense.core.model.VehicleSnapshot
     if (!short) StateNote(active)
     val colors = MaterialTheme.colorScheme
     val record: @Composable () -> Unit = {
-      Box(Modifier.fillMaxWidth().height(if (short) 160.dp else 210.dp), contentAlignment = Alignment.Center) {
-        Surface(shape = CircleShape, color = colors.surfaceContainer, modifier = Modifier.size(if (short) 148.dp else 196.dp)) {
+      Box(Modifier.fillMaxWidth().height(if (short) 160.dp else 236.dp), contentAlignment = Alignment.Center) {
+        Surface(shape = CircleShape, color = colors.primary, modifier = Modifier.size(if (short) 148.dp else 220.dp)) {
             Box(contentAlignment = Alignment.Center) {
-                Canvas(Modifier.size(if (short) 128.dp else 174.dp)) {
-                    repeat(5) { drawCircle(colors.outlineVariant.copy(alpha = .65f), size.minDimension * (.26f + it * .055f), style = Stroke(1.dp.toPx())) }
+                Canvas(Modifier.size(if (short) 128.dp else 198.dp)) {
+                    repeat(5) { drawCircle(colors.onPrimary.copy(alpha = .16f), size.minDimension * (.26f + it * .055f), style = Stroke(1.dp.toPx())) }
                 }
-                Surface(shape = CircleShape, color = colors.primaryContainer, modifier = Modifier.size(86.dp)) {
-                    Box(contentAlignment = Alignment.Center) { Icon(Icons.Outlined.MusicNote, null, Modifier.size(36.dp), tint = colors.onPrimaryContainer) }
+                Surface(shape = CircleShape, color = colors.tertiary, modifier = Modifier.size(86.dp)) {
+                    Box(contentAlignment = Alignment.Center) { Icon(Icons.Outlined.MusicNote, null, Modifier.size(36.dp), tint = colors.onTertiary) }
                 }
             }
         }
