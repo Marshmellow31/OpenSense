@@ -15,7 +15,7 @@ import java.net.URL
  */
 object DiagnosticReporter {
     /** Set to the deployed collector URL (see workers/log-collector). Blank disables uploading. */
-    const val ENDPOINT = ""
+    const val ENDPOINT = "https://xuv-log-collector.harshil3105.workers.dev/"
 
     val configured get() = ENDPOINT.isNotBlank()
 
