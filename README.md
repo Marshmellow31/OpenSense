@@ -7,7 +7,7 @@ An independent, native Android research preview for Mahindra XUV500 owners. A da
 
 OpenSense is unofficial and is not affiliated with Mahindra or the original BlueSense developers.
 
-**Status: 0.1.0-dev · research preview.** The aim is a free, maintainable replacement
+**Status: 0.3.0-dev · research preview.** The aim is a free, maintainable replacement
 for compatible XUV500 BlueSense installations. The current APK is a functional
 experimental compatibility build with separate Legacy and New BlueSense RFCOMM
 sessions, APK-derived status decoding and supported media/climate commands.
@@ -181,8 +181,9 @@ stream parser stops on alignment loss rather than guessing synchronization.
 **Storage and diagnostics:** theme, selected vehicle profile and user-created
 garage records persist privately. Diagnostic events contain predefined codes and
 timestamps, are capped at 100 entries, and stay in memory. They have no file export
-or automatic upload and disappear when the app process ends. There is no account,
-analytics or cloud service. For testing and returning useful feedback, follow the
+and disappear when the app process ends unless you allow optional code-only
+connection reports (asked once on first launch, off until you tap Allow). There is
+no account or analytics. For testing and returning useful feedback, follow the
 [first tester handoff](docs/tester-handoff.md).
 
 ## Get a development APK
@@ -273,7 +274,7 @@ authentication bypass and safety-critical ECU access are outside this project sc
 
 ## Privacy and research materials
 
-The app has no Internet permission, account, analytics, or automatic cloud sync.
+The app has no account or analytics. Its only network use is optional, code-only connection reports, sent only if you tap Allow on the first-launch prompt (event codes, app/Android version, phone model, vehicle generation and a random resettable ID; never packets, Bluetooth names/addresses, VINs or location). See `workers/log-collector`.
 Theme/profile and user-created garage records persist privately. Explicit parking
 location and user-started GPS trips also persist until removed; document links use
 user-granted provider access. Diagnostics contain enum codes/timestamps and exclude

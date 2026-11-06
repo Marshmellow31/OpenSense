@@ -18,6 +18,9 @@ export default {
     // Crude abuse limit: 30 reports per install per hour.
     const row = await env.DB.prepare("SELECT COUNT(*) AS n FROM reports WHERE install_id=? AND received_at > datetime('now','-1 hour')").bind(body.installId).first();
     if (row.n >= 30) return new Response("slow down", { status: 429 });
+    // Global cap so a flood of fake install IDs cannot fill the free tier.
+    const day = await env.DB.prepare("SELECT COUNT(*) AS n FROM reports WHERE received_at > datetime('now','-1 day')").first();
+    if (day.n >= 3000) return new Response("busy", { status: 429 });
     await env.DB.prepare("INSERT INTO reports (install_id, app, android, phone, family, events) VALUES (?,?,?,?,?,?)")
       .bind(body.installId, short(body.app, 24), Number(body.android) || 0, short(body.phone, 60), short(body.family, 24), JSON.stringify(clean)).run();
     return new Response("ok");
