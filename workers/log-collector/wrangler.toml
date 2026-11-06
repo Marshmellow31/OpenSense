@@ -1,0 +1,8 @@
+name = "xuv-log-collector"
+main = "src/index.js"
+compatibility_date = "2025-01-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "xuv-logs"
+database_id = "5711ead7-a707-41a7-b114-d6bffc27bcfb"

@@ -76,7 +76,15 @@ fun OpenSenseApp(model: OpenSenseViewModel) {
     val permission = rememberLauncherForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
         if (model.bluetooth.hasPermissions()) model.discover() else model.bluetooth.permissionDenied()
     }
+    val askConsent by model.askConsent.collectAsStateWithLifecycle()
     OpenSenseTheme(dark) {
+        if (askConsent) AlertDialog(
+            onDismissRequest = {},
+            title = { Text("Help improve XUV compatibility?") },
+            text = { Text("After each connection attempt, XUV can send event codes with timing, app and Android version, phone model and your vehicle generation, under a random ID. It never sends packets, Bluetooth names or addresses, VINs or location. You can change this any time in Settings → Bluetooth connection.") },
+            confirmButton = { TextButton({ model.answerConsent(true) }) { Text("Allow") } },
+            dismissButton = { TextButton({ model.answerConsent(false) }) { Text("No thanks") } },
+        )
         BoxWithConstraints(Modifier.fillMaxSize()) {
             val wide = maxWidth >= 600.dp
             val short = wide && maxHeight < 480.dp
