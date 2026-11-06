@@ -63,7 +63,7 @@ import org.opensense.bluetooth.VehicleLink
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Section("About OpenSense")
         Text("An independent community companion for XUV500 owners. Version 0.1.0-dev. Not affiliated with Mahindra.", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-        Text("No account, analytics or automatic cloud sync. Garage records stay in private app storage; GPS is used only when you request parking location or start a trip. Diagnostics stay in memory.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Text("No account or analytics. Garage records stay in private app storage; GPS is used only when you request parking location or start a trip. Diagnostics stay in memory unless you turn on optional code-only sharing in Bluetooth connection.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         Text("Vehicle image: Akashpbrahmavar / Wikimedia Commons (CC0), edited with AI for background extraction, registration redaction and carrier removal. Illustrative 2018 W11, not an exact image of each selected variant.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
     }
 }
@@ -146,6 +146,16 @@ import org.opensense.bluetooth.VehicleLink
     }
     StateNote(false, "Discovery and service UUIDs do not prove compatibility. Select the original app generation and connect explicitly above. Live data clears when the app leaves the foreground.")
     DetailRow(Icons.Outlined.Terminal, "Session diagnostics", "View redacted event codes", onClick = diagnostics)
+    if (org.opensense.app.storage.DiagnosticReporter.configured) {
+        val share by model.shareDiagnostics.collectAsStateWithLifecycle()
+        TonalPanel {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                Text("Help improve XUV compatibility", Modifier.weight(1f), style = MaterialTheme.typography.titleMedium)
+                Switch(checked = share, onCheckedChange = model::setShareDiagnostics)
+            }
+            Text("Off by default. When on, after each connection attempt the app sends event codes with timing, app version, Android version, phone model and your vehicle generation, under a random ID that is reset when you turn this off. It never sends packets, Bluetooth names or addresses, VINs or location.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        }
+    }
 }
 
 @Composable fun DiagnosticsScreen(model: OpenSenseViewModel) {

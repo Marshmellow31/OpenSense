@@ -13,6 +13,8 @@ import org.opensense.core.repository.SimulationRepository
 import org.opensense.core.simulation.SimulatedTransport
 import org.opensense.core.model.VehicleProfile
 import org.opensense.app.storage.GarageStore
+import org.opensense.app.storage.DiagnosticReporter
+import org.opensense.bluetooth.VehicleLink
 import kotlinx.coroutines.launch
 
 data class DemoControls(
@@ -40,6 +42,33 @@ class OpenSenseViewModel(application: Application) : AndroidViewModel(applicatio
     val controls = mutableControls.asStateFlow()
     fun changeDemo(change: (DemoControls) -> DemoControls) {
         if (repository.sample.value != null) mutableControls.value = change(mutableControls.value)
+    }
+    private val mutableShare = MutableStateFlow(store.shareDiagnostics)
+    val shareDiagnostics = mutableShare.asStateFlow()
+    private var reported = 0L
+    fun setShareDiagnostics(value: Boolean) {
+        store.shareDiagnostics = value; mutableShare.value = value
+        if (!value) store.resetInstallId()
+    }
+    /** Opt-in, codes-only upload when a vehicle session ends. */
+    private fun reportSession() {
+        if (!store.shareDiagnostics || !DiagnosticReporter.configured) return
+        val fresh = log.events.value.filter { it.timeMillis > reported }
+        if (fresh.isEmpty()) return
+        reported = fresh.last().timeMillis
+        val version = runCatching { getApplication<Application>().packageManager.getPackageInfo(getApplication<Application>().packageName, 0).versionName }.getOrNull() ?: "?"
+        val body = DiagnosticReporter.payload(store.installId, store.profile?.family?.name, version, fresh)
+        viewModelScope.launch { DiagnosticReporter.send(body) }
+    }
+    init {
+        viewModelScope.launch {
+            var last = vehicleConnection.state.value.link
+            vehicleConnection.state.collect { s ->
+                val ended = s.link in setOf(VehicleLink.DISCONNECTED, VehicleLink.FAILED) && last !in setOf(VehicleLink.DISCONNECTED, VehicleLink.FAILED)
+                last = s.link
+                if (ended) reportSession()
+            }
+        }
     }
     fun selectProfile(value: VehicleProfile?) { pause(); store.profile = value; mutableProfile.value = value }
     fun setDark(value: Boolean) { store.darkTheme = value; mutableDark.value = value }
