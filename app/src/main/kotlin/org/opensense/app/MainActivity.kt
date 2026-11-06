@@ -82,7 +82,7 @@ fun OpenSenseApp(model: OpenSenseViewModel) {
             val short = wide && maxHeight < 480.dp
             Scaffold(
                 topBar = {
-                    TopAppBar(title = {
+                    if (route != null || short || liveSession) TopAppBar(title = {
                         if (short && route == null) Column {
                             Text(if (tab == "Home") "My XUV500" else tab, Modifier.testTag("screen-title"), style = MaterialTheme.typography.titleLarge)
                             Text("${profile?.variant ?: "XUV500"} · ${if (liveSession) "Vehicle session" else if (sample != null) "Demo · no vehicle connected" else "Offline"}", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -105,7 +105,7 @@ fun OpenSenseApp(model: OpenSenseViewModel) {
                     if (!wide && route == null) HomeNav(destinations.map { it.name to it.icon }, tab) { tab = it }
                 }
             ) { padding ->
-                Row(Modifier.fillMaxSize().padding(padding)) {
+                Row(Modifier.fillMaxSize().padding(padding).then(if (route == null && !short && !liveSession) Modifier.statusBarsPadding() else Modifier)) {
                     if (wide && route == null) {
                         if (short) {
                             Column(Modifier.width(72.dp).fillMaxHeight(), verticalArrangement = Arrangement.SpaceEvenly, horizontalAlignment = Alignment.CenterHorizontally) {
@@ -136,7 +136,7 @@ fun OpenSenseApp(model: OpenSenseViewModel) {
                                     else -> LiveScreen("Vehicle", live, profile, model)
                                 }
                             } else {
-                            if (!short) ScreenHeading(tab, profile?.label ?: "XUV500", sample != null) { route = "Connection" }
+                            if (!short) ScreenHeading(tab, profile?.label ?: "XUV500", sample != null, { route = "Settings" }) { route = "Connection" }
                             when (tab) {
                                 "Home" -> VehicleScreen(sample, controls, wide, short, { tab = it }, { route = it })
                                 "Cabin" -> {

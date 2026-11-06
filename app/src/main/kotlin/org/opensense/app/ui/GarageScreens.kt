@@ -40,7 +40,7 @@ fun isGarageRoute(route: String) = route in garageRoutes || route.startsWith("Re
 
 @Composable fun GarageHub(model: OpenSenseViewModel, open: (String) -> Unit) {
     val data by model.garage.data.collectAsStateWithLifecycle()
-    GarageIntro("Your garage", "Private · saved only on this phone.")
+    Text("Private · saved only on this phone.", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
     val next = data.reminders.filterNot { it.done }.minByOrNull { it.dueAt }
     if (next != null) TonalPanel {
         Icon(Icons.Outlined.EventAvailable, null, tint = MaterialTheme.colorScheme.primary)

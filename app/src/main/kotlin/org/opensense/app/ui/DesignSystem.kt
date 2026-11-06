@@ -20,6 +20,8 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -70,7 +72,7 @@ private val AppShapes = Shapes(
 /** Connection state pill. Amber dot = simulation, never a verified vehicle warning. */
 @Composable fun StatusPill(demo: Boolean, onClick: () -> Unit) {
     val colors = MaterialTheme.colorScheme
-    Surface(shape = CircleShape, color = if (demo) colors.onSurface else colors.surfaceContainerLow, border = if (demo) null else BorderStroke(1.dp, colors.outlineVariant), onClick = onClick) {
+    Surface(shape = CircleShape, color = if (demo) colors.onSurface else colors.surfaceContainerLow, border = if (demo) null else BorderStroke(1.dp, colors.outlineVariant), onClick = onClick, modifier = Modifier.semantics { contentDescription = "Connection details" }) {
         Row(Modifier.heightIn(min = 40.dp).padding(horizontal = 14.dp), horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
             Box(Modifier.size(7.dp).background(if (demo) Color(0xFFF2A65A) else colors.outline, CircleShape))
             Text(if (demo) "Demo" else "Offline", style = MaterialTheme.typography.labelLarge, color = if (demo) colors.background else colors.onSurfaceVariant)
@@ -78,13 +80,14 @@ private val AppShapes = Shapes(
     }
 }
 
-@Composable fun ScreenHeading(title: String, vehicle: String, demo: Boolean, connection: () -> Unit) {
+@Composable fun ScreenHeading(title: String, vehicle: String, demo: Boolean, settings: (() -> Unit)? = null, connection: () -> Unit) {
     Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
         Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
             Text(vehicle.removePrefix("XUV500 "), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             Text(if (title == "Home") "My XUV500" else title, modifier = Modifier.testTag("screen-title"), style = MaterialTheme.typography.headlineLarge)
         }
         StatusPill(demo, connection)
+        if (settings != null) IconButton(onClick = settings, modifier = Modifier.padding(start = 4.dp)) { Icon(Icons.Outlined.Settings, "Settings") }
     }
 }
 
