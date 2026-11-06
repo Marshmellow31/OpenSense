@@ -45,6 +45,9 @@ class OpenSenseViewModel(application: Application) : AndroidViewModel(applicatio
     }
     private val mutableShare = MutableStateFlow(store.shareDiagnostics)
     val shareDiagnostics = mutableShare.asStateFlow()
+    private val mutableAsk = MutableStateFlow(DiagnosticReporter.configured && !store.consentAsked)
+    val askConsent = mutableAsk.asStateFlow()
+    fun answerConsent(allow: Boolean) { store.consentAsked = true; mutableAsk.value = false; setShareDiagnostics(allow) }
     private var reported = 0L
     fun setShareDiagnostics(value: Boolean) {
         store.shareDiagnostics = value; mutableShare.value = value
