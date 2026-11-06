@@ -1,0 +1,6 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="108dp" android:height="108dp" android:viewportWidth="108" android:viewportHeight="108">
+    <!-- XUV mark: two crossing strokes forming an X, woven over-and-under. Original artwork, not a Mahindra mark. -->
+    <path android:fillColor="#00000000" android:strokeColor="#F3EFE6" android:strokeWidth="11" android:strokeLineCap="round" android:pathData="M35,35L73,73" />
+    <path android:fillColor="#00000000" android:strokeColor="#1F4D3A" android:strokeWidth="19" android:strokeLineCap="butt" android:pathData="M46,62L62,46" />
+    <path android:fillColor="#00000000" android:strokeColor="#F2A65A" android:strokeWidth="11" android:strokeLineCap="round" android:pathData="M35,73L73,35" />
+</vector>

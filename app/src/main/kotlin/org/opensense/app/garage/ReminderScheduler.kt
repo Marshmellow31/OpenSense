@@ -28,8 +28,8 @@ object ReminderScheduler {
         val manager = context.getSystemService(NotificationManager::class.java)
         manager.createNotificationChannel(NotificationChannel(CHANNEL, "Garage reminders", NotificationManager.IMPORTANCE_DEFAULT))
         val open = PendingIntent.getActivity(context, reminder.id, Intent(context, MainActivity::class.java).putExtra("route", "Reminders"), PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
-        val public = Notification.Builder(context, CHANNEL).setSmallIcon(R.drawable.ic_opensense).setContentTitle("OpenSense reminder").build()
-        val notification = Notification.Builder(context, CHANNEL).setSmallIcon(R.drawable.ic_opensense)
+        val public = Notification.Builder(context, CHANNEL).setSmallIcon(R.drawable.ic_launcher_monochrome).setContentTitle("OpenSense reminder").build()
+        val notification = Notification.Builder(context, CHANNEL).setSmallIcon(R.drawable.ic_launcher_monochrome)
             .setContentTitle(reminder.title).setContentText("Your garage reminder is due. Tap to review.").setContentIntent(open)
             .setVisibility(Notification.VISIBILITY_PRIVATE).setPublicVersion(public).setAutoCancel(true).build()
         try { manager.notify("reminder", reminder.id, notification) } catch (_: SecurityException) { return false }

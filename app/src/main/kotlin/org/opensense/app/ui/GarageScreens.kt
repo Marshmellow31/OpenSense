@@ -40,7 +40,7 @@ fun isGarageRoute(route: String) = route in garageRoutes || route.startsWith("Re
 
 @Composable fun GarageHub(model: OpenSenseViewModel, open: (String) -> Unit) {
     val data by model.garage.data.collectAsStateWithLifecycle()
-    GarageIntro("Your garage", "The everyday side of ownership. Saved privately on this phone.")
+    GarageIntro("Your garage", "Private · saved only on this phone.")
     val next = data.reminders.filterNot { it.done }.minByOrNull { it.dueAt }
     if (next != null) TonalPanel {
         Icon(Icons.Outlined.EventAvailable, null, tint = MaterialTheme.colorScheme.primary)
@@ -48,14 +48,13 @@ fun isGarageRoute(route: String) = route in garageRoutes || route.startsWith("Re
         Text(dateLabel(next.dueAt), color = MaterialTheme.colorScheme.onSurfaceVariant)
         TextButton(onClick = { open("Reminders") }) { Text("View reminders") }
     }
-    Column {
-        DetailRow(Icons.Outlined.LocalGasStation, "Fuel diary", "${data.fuel.size} fill-ups · full-to-full efficiency", onClick = { open("Fuel diary") })
-        HorizontalDivider()
-        DetailRow(Icons.Outlined.Route, "Trips", "Phone GPS journeys & driving insights", onClick = { open("Trips") })
-        HorizontalDivider()
-        DetailRow(Icons.Outlined.NotificationsActive, "Reminders", "Service, insurance and important dates", onClick = { open("Reminders") })
-        HorizontalDivider()
-        DetailRow(Icons.Outlined.NearMe, "Parked car", data.parked?.let { "Saved ${dateLabel(it.time)}" } ?: "Save a place. Find your way back.", onClick = { open("Parked car") })
+    Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+        Tile(Icons.Outlined.LocalGasStation, "Fuel diary", "${data.fuel.size} fill-ups", Modifier.weight(1f), accent = true) { open("Fuel diary") }
+        Tile(Icons.Outlined.NotificationsActive, "Reminders", "${data.reminders.count { !it.done }} open", Modifier.weight(1f)) { open("Reminders") }
+    }
+    Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+        Tile(Icons.Outlined.NearMe, "Parked car", data.parked?.let { "Saved ${dateLabel(it.time)}" } ?: "Not saved", Modifier.weight(1f)) { open("Parked car") }
+        Tile(Icons.Outlined.FolderOpen, "Documents", "${data.documents.count { !it.manual }} links", Modifier.weight(1f)) { open("Documents") }
     }
     Column {
         Section("Keep it together")
