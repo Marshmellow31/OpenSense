@@ -63,7 +63,7 @@ import org.opensense.bluetooth.VehicleLink
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Section("About OpenSense")
         Text("An independent community companion for XUV500 owners. Version 0.1.0-dev. Not affiliated with Mahindra.", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-        Text("No account or analytics. Garage records stay in private app storage; GPS is used only when you request parking location or start a trip. Diagnostics stay in memory unless you turn on optional code-only sharing in Bluetooth connection.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Text("No account or analytics. Garage records stay in private app storage; GPS is used only when you request parking location or start a trip. Diagnostics stay in memory unless code-only connection reports are on (default; switch off in Bluetooth connection).", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         Text("Vehicle image: Akashpbrahmavar / Wikimedia Commons (CC0), edited with AI for background extraction, registration redaction and carrier removal. Illustrative 2018 W11, not an exact image of each selected variant.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
     }
 }
@@ -153,7 +153,7 @@ import org.opensense.bluetooth.VehicleLink
                 Text("Help improve XUV compatibility", Modifier.weight(1f), style = MaterialTheme.typography.titleMedium)
                 Switch(checked = share, onCheckedChange = model::setShareDiagnostics)
             }
-            Text("Off by default. When on, after each connection attempt the app sends event codes with timing, app version, Android version, phone model and your vehicle generation, under a random ID that is reset when you turn this off. It never sends packets, Bluetooth names or addresses, VINs or location.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text("On by default; switch it off any time. After each connection attempt the app sends event codes with timing, app version, Android version, phone model and your vehicle generation, under a random ID that is reset when you turn this off. It never sends packets, Bluetooth names or addresses, VINs or location.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
     }
 }
