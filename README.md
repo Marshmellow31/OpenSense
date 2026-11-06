@@ -7,7 +7,7 @@ An independent, native Android research preview for Mahindra XUV500 owners. A da
 
 OpenSense is unofficial and is not affiliated with Mahindra or the original BlueSense developers.
 
-**Status: 0.1.0-dev · research preview.** The aim is a free, maintainable replacement
+**Status: 0.2.0-dev · research preview.** The aim is a free, maintainable replacement
 for compatible XUV500 BlueSense installations. The current APK is a functional
 experimental compatibility build with separate Legacy and New BlueSense RFCOMM
 sessions, APK-derived status decoding and supported media/climate commands.

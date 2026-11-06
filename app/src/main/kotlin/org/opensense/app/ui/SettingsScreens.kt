@@ -62,7 +62,7 @@ import org.opensense.bluetooth.VehicleLink
     }
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Section("About OpenSense")
-        Text("An independent community companion for XUV500 owners. Version 0.1.0-dev. Not affiliated with Mahindra.", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Text("An independent community companion for XUV500 owners. Version 0.2.0-dev. Not affiliated with Mahindra.", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         Text("No account, analytics or automatic cloud sync. Garage records stay in private app storage; GPS is used only when you request parking location or start a trip. Diagnostics stay in memory.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         Text("Vehicle image: Akashpbrahmavar / Wikimedia Commons (CC0), edited with AI for background extraction, registration redaction and carrier removal. Illustrative 2018 W11, not an exact image of each selected variant.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
     }
